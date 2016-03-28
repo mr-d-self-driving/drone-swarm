@@ -1,0 +1,35 @@
+# depslib dependency file v1.0
+1457468621 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\source\coordinate3d.cpp
+	"Vector3D.h"
+	"Coordinate3D.h"
+
+1456936292 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\headers\vector3d.h
+	<cmath>
+	<vector>
+
+1456936161 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\headers\coordinate3d.h
+	"Vector3D.h"
+
+1457467050 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\source\drone.cpp
+
+1456937489 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\source\main.cpp
+	"Coordinate3D.h"
+	"Vector3D.h"
+	<iostream>
+
+1457468726 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\source\test.cpp
+	<iostream>
+	"CCode.h"
+
+1457468771 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\headers\ccode.h
+	<sys/types.h>
+	<sys/socket.h>
+	<stdio.h>
+	<string.h>
+	<arpa/inet.h>
+
+1456936290 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\source\vector3d.cpp
+	<cmath>
+	<vector>
+	"Vector3D.h"
+

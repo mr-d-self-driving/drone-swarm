@@ -126,6 +126,88 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
     int l1=v1folllows.size();
     int l2=v2folllows.size();
 
+    // Stores vector v1 to the rows of those that follows v1, and same for v2
+    // This should..should have the same effect.
+    // Maybe there is a better way to do this?
+    counter = 0;
+    for(auto iter = vformChange->begin(); iter != vformChange->end(); iter++)
+    {
+        if(counter < l1)
+        {
+            Vector3D *temp = new Vector3D(*v1);
+            (*vformChange)[counter] = *temp;
+            counter++;
+        }
+        else
+        {
+            Vector3D *temp = new Vector3D(*v2);
+            (*vformChange)[counter] = *temp;
+            counter++;
+        }
+    }
+
+    // remakes/resets leadDroneCoords for no apparent reason..?
+    leadDroneCoords = Repmat(leadDroneCoordinates, num_drones);
+
+    // matrix of distance between vector to the lead drone
+    //
+    vector<Vector3D> *vectorToLeadDrone = new vector<Vector3D>(num_drones);
+    counter = 0;
+    for(auto iter = vectorToLeadDrone->begin(); iter != vectorToLeadDrone->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*leadDroneCoords)[counter]).X() - (strtod(ParseNet(Net[counter], 1).c_str(),NULL)),
+                                      ((*leadDroneCoords)[counter]).Y() - (strtod(ParseNet(Net[counter], 2).c_str(),NULL)),
+                                      ((*leadDroneCoords)[counter]).Z() - (strtod(ParseNet(Net[counter], 3).c_str(),NULL))
+                                      );
+        (*vectorToLeadDrone)[counter] = *temp;
+        counter++;
+    }
+
+    vector<Vector3D> *projVectorToLeadDroneFV = new vector<Vector3D>(num_drones);
+/*
+    // projVtldFV = (dot(vtld, vformChange, 2)/dot(vformChange, vformChange, 2))* vformChange;
+    // projVtldFV(v1follows,1:2) = [projVtldFV(v1follows,2) projVtldFV(v1follows,1)];
+*/
+
+    // matrix droneVector = (leadDroneCoords - projVtldFV) - Net(:,1:3);
+    vector<Vector3D> *droneVector = new vector<Vector3D>(num_drones);
+    counter = 0;
+    for(auto iter = droneVector->begin(); iter != droneVector->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*leadDroneCoords)[counter]).X() - ((*droneVector)[counter]).X() - (strtod(ParseNet(Net[counter], 1).c_str(),NULL)),
+                                      ((*leadDroneCoords)[counter]).Y() - ((*droneVector)[counter]).Y() - (strtod(ParseNet(Net[counter], 2).c_str(),NULL)),
+                                      ((*leadDroneCoords)[counter]).Z() - ((*droneVector)[counter]).Z() - (strtod(ParseNet(Net[counter], 3).c_str(),NULL))
+                                      );
+        (*droneVector)[counter] = *temp;
+        counter++;
+    }
+
+    // matlab only? need for cpp?
+    // coder.varsize('StateChanges', [num_drones 3]);
+
+    // baseChange is now a unit vector
+    counter = 0;
+    for(auto iter = baseChange->begin(); iter != baseChange->end(); iter++)
+    {
+        //(*baseChange)[counter] = *(*baseChange)[counter].UnitVector();
+        Vector3D *temp = new Vector3D();
+        temp = (*baseChange)[counter].UnitVector();
+        (*baseChange)[counter] = *temp;
+        counter++;
+    }
+
+    // droneVector is now a unit vector
+    counter = 0;
+    for(auto iter = droneVector->begin(); iter != droneVector->end(); iter++)
+    {
+        //(*droneVector)[counter] = *(*droneVector)[counter].UnitVector();
+        Vector3D *temp = new Vector3D();
+        temp = (*droneVector)[counter].UnitVector();
+        (*droneVector)[counter] = *temp;
+        counter++;
+    }
 
 }
 

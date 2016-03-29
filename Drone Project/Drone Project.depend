@@ -33,3 +33,41 @@
 	<vector>
 	"Vector3D.h"
 
+1457458158 source:c:\users\s0lin_000\documents\bitbucket\droneswarmspring2016\drone project\source\coordinate3d.cpp
+	"Vector3D.h"
+	"Coordinate3D.h"
+
+1457458164 c:\users\s0lin_000\documents\bitbucket\droneswarmspring2016\drone project\headers\vector3d.h
+	<cmath>
+	<vector>
+
+1457458158 c:\users\s0lin_000\documents\bitbucket\droneswarmspring2016\drone project\headers\coordinate3d.h
+	"Vector3D.h"
+
+1457458158 source:c:\users\s0lin_000\documents\bitbucket\droneswarmspring2016\drone project\source\main.cpp
+	"Coordinate3D.h"
+	"Vector3D.h"
+	<iostream>
+
+1457458158 source:c:\users\s0lin_000\documents\bitbucket\droneswarmspring2016\drone project\source\test.cpp
+	<iostream>
+	"CCode.h"
+
+1457458158 c:\users\s0lin_000\documents\bitbucket\droneswarmspring2016\drone project\headers\ccode.h
+	<sys/types.h>
+	<sys/socket.h>
+	<stdio.h>
+	<string.h>
+	<arpa/inet.h>
+
+1457458158 source:c:\users\s0lin_000\documents\bitbucket\droneswarmspring2016\drone project\source\vector3d.cpp
+	<cmath>
+	<vector>
+	"Vector3D.h"
+
+1459227963 source:c:\users\s0lin_000\documents\bitbucket\droneswarmspring2016\drone project\source\drone.cpp
+	"Vector3D.h"
+	<string>
+	<stdlib.h>
+	<math.h>
+

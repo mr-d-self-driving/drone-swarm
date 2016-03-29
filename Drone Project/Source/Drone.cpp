@@ -164,11 +164,42 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
         counter++;
     }
 
-    vector<Vector3D> *projVectorToLeadDroneFV = new vector<Vector3D>(num_drones);
-/*
     // projVtldFV = (dot(vtld, vformChange, 2)/dot(vformChange, vformChange, 2))* vformChange;
+    // projection of vectorToLeadDrone onto vformChange
+    vector<Vector3D> *projVectorToLeadDroneFV = new vector<Vector3D>(num_drones);
+    counter = 0;
+    for(auto iter = projVectorToLeadDroneFV->begin(); iter != projVectorToLeadDroneFV->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*vectorToLeadDrone)[counter]).Dot((*vformChange)[counter]) / ((*vformChange)[counter]).Dot((*vformChange)[counter]) * (*vformChange)[counter].X(),
+                                      ((*vectorToLeadDrone)[counter]).Dot((*vformChange)[counter]) / ((*vformChange)[counter]).Dot((*vformChange)[counter]) * (*vformChange)[counter].Y(),
+                                      ((*vectorToLeadDrone)[counter]).Dot((*vformChange)[counter]) / ((*vformChange)[counter]).Dot((*vformChange)[counter]) * (*vformChange)[counter].Z()
+                                      );
+        (*projVectorToLeadDroneFV)[counter] = *temp;
+        counter++;
+    }
+
     // projVtldFV(v1follows,1:2) = [projVtldFV(v1follows,2) projVtldFV(v1follows,1)];
-*/
+    // swaps all x and y for all following v1
+    counter = 0;
+    for(auto iter = projVectorToLeadDroneFV->begin(); iter != projVectorToLeadDroneFV->end(); iter++)
+    {
+        if(counter < l1)
+        {
+            Vector3D *temp = new Vector3D(
+                                          (*projVectorToLeadDroneFV)[counter].Y(),
+                                          (*projVectorToLeadDroneFV)[counter].X(),
+                                          (*projVectorToLeadDroneFV)[counter].Z()
+                                          );
+            (*projVectorToLeadDroneFV)[counter] = *temp;
+            counter++;
+        }
+        else
+        {
+            // do nothing
+        }
+    }
+
 
     // matrix droneVector = (leadDroneCoords - projVtldFV) - Net(:,1:3);
     vector<Vector3D> *droneVector = new vector<Vector3D>(num_drones);

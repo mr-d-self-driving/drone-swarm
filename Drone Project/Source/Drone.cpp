@@ -215,7 +215,7 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
         counter++;
     }
 
-    // matlab only? need for cpp?
+    // declares matrix state changes of numDrones x 3
     // coder.varsize('StateChanges', [num_drones 3]);
 
     // baseChange is now a unit vector
@@ -234,12 +234,71 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
     for(auto iter = droneVector->begin(); iter != droneVector->end(); iter++)
     {
         //(*droneVector)[counter] = *(*droneVector)[counter].UnitVector();
-        Vector3D *temp = new Vector3D();
+        Vector3D *temp = new Vector3D();    vector<Vector3D> *droneVector = new vector<Vector3D>(num_drones);
+    counter = 0;
+    for(auto iter = droneVector->begin(); iter != droneVector->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*leadDroneCoords)[counter]).X() - ((*droneVector)[counter]).X() - (strtod(ParseNet(Net[counter], 1).c_str(),NULL)),
+                                      ((*leadDroneCoords)[counter]).Y() - ((*droneVector)[counter]).Y() - (strtod(ParseNet(Net[counter], 2).c_str(),NULL)),
+                                      ((*leadDroneCoords)[counter]).Z() - ((*droneVector)[counter]).Z() - (strtod(ParseNet(Net[counter], 3).c_str(),NULL))
+                                      );
+        (*droneVector)[counter] = *temp;
+        counter++;
+    }
         temp = (*droneVector)[counter].UnitVector();
         (*droneVector)[counter] = *temp;
         counter++;
     }
 
+    // StateChanges = combines moving in formationVector direction with moving into formation
+    //StateChanges = (baseChange(1:num_drones,1:3) * formationSpeed) + droneVector(1:num_drones,1:3);
+    vector<Vector3D> *StateChanges = new vector<Vector3D>(num_drones);
+    counter = 0;
+    for(auto iter = StateChanges->begin(); iter != StateChanges->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*baseChange)[counter]).X() * formationSpeed + ((*droneVector)[counter]).X(),
+                                      ((*baseChange)[counter]).Y() * formationSpeed + ((*droneVector)[counter]).Y(),
+                                      ((*baseChange)[counter]).Z() * formationSpeed + ((*droneVector)[counter]).Z()
+                                      );
+        (*StateChanges)[counter] = *temp;
+        counter++;
+    }
+
+/*******************************************************************************************
+// TODO
+// CollisionAvoidence:
+********************************************************************************************/
+    vector<Vector3D> *collisionAvoidenceVector = new vector<Vector3D>(num_drones);
+    // %collisionAvoidenceVector = avoidCollisions(Net, StateChanges, num_drones);
+    // we pass in StateChanges here, aka what we want the drones to do
+    // %collisionAvoidenceVector = rdivide(collisionAvoidenceVector,repmat(magnitudes(collisionAvoidenceVector), [1 3]));
+    // make collisionAvoidance a unit vector
+
+
+
+    // same as before but include collision avoidance movement
+    // StateChanges = combines moving in formationVector direction with moving into formation
+    // as well as include the collision avoidance movement.
+    // StateChanges =
+    //                  (baseChange(1:num_drones,1:3) * formationSpeed)
+    //                  + droneVector(1:num_drones,1:3)
+    //                  + collisionAvoidenceVector(1:num_drones, 1:3);
+    counter = 0;
+    for(auto iter = StateChanges->begin(); iter != StateChanges->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*baseChange)[counter]).X() * formationSpeed + ((*droneVector)[counter]).X() + ((*collisionAvoidenceVector)[counter]).X(),
+                                      ((*baseChange)[counter]).Y() * formationSpeed + ((*droneVector)[counter]).Y() + ((*collisionAvoidenceVector)[counter]).Y(),
+                                      ((*baseChange)[counter]).Z() * formationSpeed + ((*droneVector)[counter]).Z() + ((*collisionAvoidenceVector)[counter]).Z()
+                                      );
+        (*StateChanges)[counter] = *temp;
+        counter++;
+    }
+
+    // There are code for dead drones. It just moves dead drones down 1 unit on the z axis.
+    // sim only, so skipping.
 }
 
 //This is the first function from the Matlab Drones file.

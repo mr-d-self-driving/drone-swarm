@@ -271,6 +271,7 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
 // CollisionAvoidence:
 ********************************************************************************************/
     vector<Vector3D> *collisionAvoidenceVector = new vector<Vector3D>(num_drones);
+    collisionAvoidenceVector = avoidCollision(Net, )
     // %collisionAvoidenceVector = avoidCollisions(Net, StateChanges, num_drones);
     // we pass in StateChanges here, aka what we want the drones to do
     // %collisionAvoidenceVector = rdivide(collisionAvoidenceVector,repmat(magnitudes(collisionAvoidenceVector), [1 3]));
@@ -299,6 +300,52 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
 
     // There are code for dead drones. It just moves dead drones down 1 unit on the z axis.
     // sim only, so skipping.
+}
+
+void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones)
+{
+    int minCollisionDistance = 12;
+
+    // creating a matrix of only living drones
+    vector<Vector3D> *livingDrones = new vector<Vector3D>(num_drones);
+    int counter = 0;
+    int droneCounter = 0;   // counter for living drones.
+    for(auto iter = livingDrones->begin(); iter != livingDrones->end(); iter++)
+    {
+        if(strtod(ParseNet(Net[counter], 5).c_str(), NULL) == 1)
+        {
+            Vector3D *temp = new Vector3D(
+                                        //(strtod(ParseNet(Net[counter], 5).c_str(),NULL))
+                                         );
+            (*livingDrones)[droneCounter] = *temp;
+            droneCounter++;
+        }
+        counter++;
+    }
+
+    // x is a copy matrix of livingDrones. Used to calculate the distance
+    vector<Vector3D> *x = new vector<Vector3D>((*livingDrones).size());
+    int numDronesLiving = (*x).size();
+
+/************************************************************************
+Skipping distance between objects in euclidean
+************************************************************************/
+    // distance vector with size m(m–1)/2
+    vector<double> *distance = new vector<double>(numDronesLiving*(numDronesLiving-1)/2);
+    // Distance in Euclidean 3 space
+    counter = 0;
+    for(auto iter = distance->begin(); iter != distance->end(); iter++)
+    {
+        (*distance)[counter] = sqrt(
+                                    ((*x)[counter].X() * (*x)[counter].X())
+                                    + ((*x)[counter].Y() * (*x)[counter].Y())
+                                    + ((*x)[counter].Z() * (*x)[counter].Z())
+                                   );
+        counter++;
+    }
+
+
+
 }
 
 //This is the first function from the Matlab Drones file.

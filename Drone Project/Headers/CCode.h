@@ -14,9 +14,17 @@ extern "C" {
 //Descriptor for our socket
 int ourSocketDescriptor;
 
+
+/**
+With the IP set command I don't think we need to create sockaddr_in objects for every drone.
+It might cut down on overhead though to create one for each at startup and have a "SendToAll" type function.
+**/
+
+
 //IPv4 info struct, stores IP addresses
 struct sockaddr_in myAddr;	//The info for this host, use for initialization
-struct sockaddr_in remoteAddr; //Stores info for other unit, needs to be an array(?) eventually
+
+struct sockaddr_in remoteAddr; //Stores info for other unit
 
 //Needed parameter for system calls
 socklen_t addrlen = sizeof(myAddr);
@@ -91,7 +99,7 @@ unsigned char * RecieveMessage()
 	//recieve message from socket
 	//Parameters: socket, buffer, buffer length, flags, struct to store info on sender, size of that struct
 	bytesRecieved = recvfrom(ourSocketDescriptor, messageBuffer, BUFFERSIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
-	printf("received %d bytes\n", bytesRecieved);
+	//printf("received %d bytes\n", bytesRecieved);
 	if (bytesRecieved > 0) {
 			messageBuffer[bytesRecieved] = 0;
 			return messageBuffer;

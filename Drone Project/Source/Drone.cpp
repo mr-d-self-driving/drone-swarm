@@ -234,18 +234,7 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
     for(auto iter = droneVector->begin(); iter != droneVector->end(); iter++)
     {
         //(*droneVector)[counter] = *(*droneVector)[counter].UnitVector();
-        Vector3D *temp = new Vector3D();    vector<Vector3D> *droneVector = new vector<Vector3D>(num_drones);
-    counter = 0;
-    for(auto iter = droneVector->begin(); iter != droneVector->end(); iter++)
-    {
-        Vector3D *temp = new Vector3D(
-                                      ((*leadDroneCoords)[counter]).X() - ((*droneVector)[counter]).X() - (strtod(ParseNet(Net[counter], 1).c_str(),NULL)),
-                                      ((*leadDroneCoords)[counter]).Y() - ((*droneVector)[counter]).Y() - (strtod(ParseNet(Net[counter], 2).c_str(),NULL)),
-                                      ((*leadDroneCoords)[counter]).Z() - ((*droneVector)[counter]).Z() - (strtod(ParseNet(Net[counter], 3).c_str(),NULL))
-                                      );
-        (*droneVector)[counter] = *temp;
-        counter++;
-    }
+        Vector3D *temp = new Vector3D();
         temp = (*droneVector)[counter].UnitVector();
         (*droneVector)[counter] = *temp;
         counter++;
@@ -271,13 +260,18 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
 // CollisionAvoidence:
 ********************************************************************************************/
     vector<Vector3D> *collisionAvoidenceVector = new vector<Vector3D>(num_drones);
-    collisionAvoidenceVector = avoidCollision(Net, )
-    // %collisionAvoidenceVector = avoidCollisions(Net, StateChanges, num_drones);
+    // collisionAvoidenceVector = avoidCollisions(Net, StateChanges, num_drones);
     // we pass in StateChanges here, aka what we want the drones to do
-    // %collisionAvoidenceVector = rdivide(collisionAvoidenceVector,repmat(magnitudes(collisionAvoidenceVector), [1 3]));
     // make collisionAvoidance a unit vector
-
-
+    counter = 0;
+    for(auto iter = collisionAvoidenceVector->begin(); iter != collisionAvoidenceVector->end(); iter++)
+    {
+        //(*collisionAvoidenceVector)[counter] = *(*collisionAvoidenceVector)[counter].UnitVector();
+        Vector3D *temp = new Vector3D();
+        temp = (*collisionAvoidenceVector)[counter].UnitVector();
+        (*collisionAvoidenceVector)[counter] = *temp;
+        counter++;
+    }
 
     // same as before but include collision avoidance movement
     // StateChanges = combines moving in formationVector direction with moving into formation
@@ -315,7 +309,9 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
         if(strtod(ParseNet(Net[counter], 5).c_str(), NULL) == 1)
         {
             Vector3D *temp = new Vector3D(
-                                        //(strtod(ParseNet(Net[counter], 5).c_str(),NULL))
+                                            (strtod(ParseNet(Net[counter], 1).c_str(),NULL)),
+                                            (strtod(ParseNet(Net[counter], 2).c_str(),NULL)),
+                                            (strtod(ParseNet(Net[counter], 3).c_str(),NULL))
                                          );
             (*livingDrones)[droneCounter] = *temp;
             droneCounter++;
@@ -325,11 +321,19 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
 
     // x is a copy matrix of livingDrones. Used to calculate the distance
     vector<Vector3D> *x = new vector<Vector3D>((*livingDrones).size());
+    counter = 0;
+    for(auto iter = x->begin(); iter != x->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*livingDrones)[counter]).X(),
+                                      ((*livingDrones)[counter]).Y(),
+                                      ((*livingDrones)[counter]).Z()
+                                      );
+        (*x)[counter] = *temp;
+        counter++;
+    }
     int numDronesLiving = (*x).size();
 
-/************************************************************************
-Skipping distance between objects in euclidean
-************************************************************************/
     // distance vector with size m(m–1)/2
     vector<double> *distance = new vector<double>(numDronesLiving*(numDronesLiving-1)/2);
     // Distance in Euclidean 3 space
@@ -344,7 +348,156 @@ Skipping distance between objects in euclidean
         counter++;
     }
 
+    // Matrix of (number of rows in x) X (number of rows in x)
+    // where everything below the diagonal is 1
+    // 0 0 0
+    // 1 0 0
+    // 1 1 0
+    int tempMatrix[numDronesLiving][numDronesLiving] = {0};
 
+    for(int row = 1; row < (*x).size(); row++)
+    {
+        for(int column = 0; column < row; column++)
+        {
+            tempMatrix[row][column] = 1;
+        }
+    }
+
+    /*
+    %# get the indices of the 1's
+    [rowIdx,colIdx] = find(tmp);
+
+    %# create the output
+    out = [D',livingDrones(rowIdx,:),livingDrones(colIdx,:)];
+    */
+    // This is most definitely not right
+    int unknowsize = 4;    // magic number, need to comeback and fix
+    double outputMatrix[distance->size()][unknowsize];
+    for(int i = 0; i < distance->size(); i++)
+    {
+        outputMatrix[i][0] = (*distance)[counter];
+        outputMatrix[i][1] = (*livingDrones)[counter].X();
+        outputMatrix[i][2] = (*livingDrones)[counter].Y();
+        outputMatrix[i][3] = (*livingDrones)[counter].Z();
+    }
+
+
+    vector<double> selectCollisions;
+
+    counter = 0;
+    for(auto iter = distance->begin(); iter != distance->end(); iter++)
+    {
+        if((*distance)[counter] < minCollisionDistance)
+        {
+            selectCollisions.push_back(1);
+        }
+        else
+        {
+            selectCollisions.push_back(0);
+        }
+        counter++;
+    }
+
+    double collisions[distance->size()][unknowsize];
+    counter = 0;
+    int tempCounter = 0;
+    while(counter < distance->size())
+    {
+        if(selectCollisions[counter] == 1)
+        {
+            collisions[tempCounter][0] = (*distance)[counter];
+            collisions[tempCounter][1] = (*livingDrones)[counter].X();
+            collisions[tempCounter][2] = (*livingDrones)[counter].Y();
+            collisions[tempCounter][3] = (*livingDrones)[counter].Z();
+            tempCounter++;
+        }
+        counter++;
+    }
+
+    double collisionDroneMatrix[distance->size()][2];
+    for(int i = 0; i < distance->size(); i++)
+    {
+        collisionDroneMatrix[i][0] = collisions[i][7];
+        collisionDroneMatrix[i][1] = collisions[i][14];
+    }
+
+    vector<Vector3D> *vbpt = new vector<Vector3D>(numDronesLiving);
+    counter = 0;
+    for(auto iter = vbpt->begin(); iter != vbpt->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])], 1).c_str(), NULL) - strtod(ParseNet(Net[int(collisionDroneMatrix[counter][1])], 1).c_str(), NULL),
+                                      strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])], 2).c_str(), NULL) - strtod(ParseNet(Net[int(collisionDroneMatrix[counter][1])], 2).c_str(), NULL),
+                                      strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])], 3).c_str(), NULL) - strtod(ParseNet(Net[int(collisionDroneMatrix[counter][1])], 3).c_str(), NULL)
+                                      );
+        (*vbpt)[counter] = *temp;
+
+        counter++;
+    }
+
+    vector<double> magnitudeVbpt;
+    for(auto iter = vbpt->begin(); iter != vbpt->end(); iter++)
+    {
+        double temp = (*vbpt)[counter].Magnitude();
+        magnitudeVbpt.push_back(temp);
+
+        counter++;
+    }
+
+    vector<Vector3D> *uvbpt = new vector<Vector3D>(numDronesLiving);
+    counter = 0;
+    for(auto iter = uvbpt->begin(); iter != uvbpt->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*vbpt)[counter]).X() / magnitudeVbpt[counter],
+                                      ((*vbpt)[counter]).Y() / magnitudeVbpt[counter],
+                                      ((*vbpt)[counter]).Z() / magnitudeVbpt[counter]
+                                      );
+        (*uvbpt)[droneCounter] = *temp;
+        counter++;
+    }
+
+    vector<Vector3D> *chvt = new vector<Vector3D>(numDronesLiving);
+    counter = 0;
+    for(auto iter = chvt->begin(); iter != chvt->end(); chvt++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      ((*uvbpt)[counter]).X() * (minCollisionDistance - magnitudeVbpt[counter]),
+                                      ((*uvbpt)[counter]).Y() * (minCollisionDistance - magnitudeVbpt[counter]),
+                                      ((*uvbpt)[counter]).Z() * (minCollisionDistance - magnitudeVbpt[counter])
+                                      );
+        (*chvt)[droneCounter] = *temp;
+        counter++;
+    }
+
+    vector<Vector3D> *collisionAvoidVector = new vector<Vector3D>(numDronesLiving);
+    counter = 0;
+    for(auto iter = collisionAvoidVector->begin(); iter != collisionAvoidVector->end(); iter++)
+    {
+        Vector3D *temp = new Vector3D(
+                                      0,0,0//(*collisionAvoidVector)[int(collisionDroneMatrix[counter][0])].X() + (*chvt)[counter].X()
+                                      );
+        (*collisionAvoidVector)[counter] = *temp;
+        counter++;
+    }
+
+    counter = 0;
+    for(int i = 0; i < distance->size(); i++)
+    {
+        (*collisionAvoidVector)[int(collisionDroneMatrix[i][0])].setX((*collisionAvoidVector)[int(collisionDroneMatrix[i][0])].X() + (*chvt)[counter].X());
+        (*collisionAvoidVector)[int(collisionDroneMatrix[i][0])].setY((*collisionAvoidVector)[int(collisionDroneMatrix[i][0])].X() + (*chvt)[counter].Y());
+        (*collisionAvoidVector)[int(collisionDroneMatrix[i][0])].setZ((*collisionAvoidVector)[int(collisionDroneMatrix[i][0])].X() + (*chvt)[counter].Z());
+        counter++;
+    }
+
+    counter = 0;
+    for(int i = 0; i < distance->size(); i++)
+    {
+        (*collisionAvoidVector)[int(collisionDroneMatrix[i][1])].setX((*collisionAvoidVector)[int(collisionDroneMatrix[i][1])].X() - (*chvt)[counter].X());
+        (*collisionAvoidVector)[int(collisionDroneMatrix[i][1])].setY((*collisionAvoidVector)[int(collisionDroneMatrix[i][1])].X() - (*chvt)[counter].Y());
+        (*collisionAvoidVector)[int(collisionDroneMatrix[i][1])].setZ((*collisionAvoidVector)[int(collisionDroneMatrix[i][1])].X() - (*chvt)[counter].Z());
+        counter++;
+    }
 
 }
 

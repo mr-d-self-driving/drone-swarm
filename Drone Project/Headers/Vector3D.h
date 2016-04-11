@@ -29,6 +29,12 @@ public:
 
 	double Z() const;
 
+    void setX(double input);
+
+	void setY(double input);
+
+	void setZ(double input);
+
 	Vector3D* UnitVector();
 
 	Vector3D* operator/(double rhs);

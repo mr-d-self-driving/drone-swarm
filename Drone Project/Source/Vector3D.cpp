@@ -111,3 +111,18 @@ double Vector3D::Z() const
 {
 	return z;
 }
+
+void Vector3D::setX(double input)
+{
+    x = input;
+}
+
+void Vector3D::setY(double input)
+{
+    y = input;
+}
+
+void Vector3D::setZ(double input)
+{
+    z = input;
+}

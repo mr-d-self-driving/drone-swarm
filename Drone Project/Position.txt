@@ -1,0 +1,11 @@
+Position: X: 50.12Y: 49.34Z: 39.4
+Position: X: 55.12Y: 54.34Z: 39.4
+Position: X: 60.12Y: 59.34Z: 39.4
+Position: X: 65.12Y: 64.34Z: 39.4
+Position: X: 70.12Y: 69.34Z: 39.4
+Position: X: 75.12Y: 74.34Z: 39.4
+Position: X: 80.12Y: 79.34Z: 39.4
+Position: X: 85.12Y: 84.34Z: 39.4
+Position: X: 90.12Y: 85.34Z: 39.4
+Position: X: 95.12Y: 94.34Z: 39.4
+Position: X: 100.12Y: 99.34Z: 39.4

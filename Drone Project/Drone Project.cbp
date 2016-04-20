@@ -31,8 +31,10 @@
 		</Compiler>
 		<Unit filename="Headers/CCode.h" />
 		<Unit filename="Headers/Coordinate3D.h" />
+		<Unit filename="Headers/Demo.h" />
 		<Unit filename="Headers/Vector3D.h" />
 		<Unit filename="Source/Coordinate3D.cpp" />
+		<Unit filename="Source/Demo.cpp" />
 		<Unit filename="Source/Drone.cpp" />
 		<Unit filename="Source/Main.cpp" />
 		<Unit filename="Source/Test.cpp" />

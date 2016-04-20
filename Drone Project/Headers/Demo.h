@@ -9,3 +9,6 @@
 //Initialize()
 //This will create the 3 text files,
 void Initialize();
+
+//Close the files
+void CloseFiles();

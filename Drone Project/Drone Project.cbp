@@ -37,7 +37,6 @@
 		<Unit filename="Source/Demo.cpp" />
 		<Unit filename="Source/Drone.cpp" />
 		<Unit filename="Source/Main.cpp" />
-		<Unit filename="Source/Test.cpp" />
 		<Unit filename="Source/Vector3D.cpp" />
 		<Extensions>
 			<code_completion />

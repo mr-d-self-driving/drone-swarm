@@ -1,0 +1,11 @@
+Position: X: 250.12Y: 49.34Z: 39.4
+Position: X: 255.12Y: 54.34Z: 39.4
+Position: X: 260.12Y: 59.34Z: 39.4
+Position: X: 265.12Y: 64.34Z: 39.4
+Position: X: 270.12Y: 69.34Z: 39.4
+Position: X: 275.12Y: 74.34Z: 39.4
+Position: X: 280.12Y: 79.34Z: 39.4
+Position: X: 285.12Y: 84.34Z: 39.4
+Position: X: 290.12Y: 85.34Z: 39.4
+Position: X: 295.12Y: 94.34Z: 39.4
+Position: X: 300.12Y: 99.34Z: 39.4

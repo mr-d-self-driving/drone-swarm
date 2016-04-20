@@ -20,17 +20,30 @@ def parse(line):
 	return float(coordinates[2]), float(coordinates[3]), float(coordinates[4])
 
 def main():
-	f = open('Position.txt', 'r')
-	x = 0.0
-	y = 0.0
-	z = 0.0
+	f1 = open('Position.txt', 'r')
+	f2 = open('Position2.txt', 'r')
+	x1 = 0.0
+	y1 = 0.0
+	z1 = 0.0
+	x2 = 0.0
+	y2 = 0.0
+	z2 = 0.0
 	while 1:
-		for line in f:
-			pygame.draw.polygon(screen, black, ((x-5, y), (x+5, y), (x, y+5)), 0)
-			x,y,z = parse(line)
-			pygame.draw.polygon(screen, yellow, ((x-5, y), (x+5, y), (x, y+5)), 0)
-			pygame.display.update()
-			clock.tick(FPS)
+		line = f1.readline()
+		if(line != ''):
+			pygame.draw.polygon(screen, black, ((x1-5, y1), (x1+5, y1), (x1, y1+5)), 0)
+			x1,y1,z1 = parse(line)
+			pygame.draw.polygon(screen, yellow, ((x1-5, y1), (x1+5, y1), (x1, y1+5)), 0)
+		pygame.display.update()
+		clock.tick(FPS)
+		
+		line = f2.readline()
+		if(line != ''):
+			pygame.draw.polygon(screen, black, ((x2-5, y2), (x2+5, y2), (x2, y2+5)), 0)
+			x2,y2,z2 = parse(line)
+			pygame.draw.polygon(screen, yellow, ((x2-5, y2), (x2+5, y2), (x2, y2+5)), 0)
+		pygame.display.update()
+		clock.tick(FPS)
 
 		
 if __name__=='__main__':

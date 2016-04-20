@@ -16,6 +16,7 @@ int main()
 
     #ifdef DEMO
     cout << "Demo detected" << endl;
+    Initialize();
     return 0;
     #endif // DEMO
 

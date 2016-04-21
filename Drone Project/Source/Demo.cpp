@@ -1,4 +1,5 @@
 //Demo code for writing to & from files goes here
+#include "Demo.h"
 #include <fstream>
 #include <iostream>
 #include "Coordinate3D.h"
@@ -11,26 +12,26 @@ using std::string;
 ofstream PositionFile, RecPacketFile, SentPacketFile;
 
 //WritePosition()
-void WritePosition(Coordinate3D position )
+void Demo::WritePosition(Coordinate3D* position )
 {
-    PositionFile << "Position: X: " << position.X() << "Y: " << position.Y() << "Z: " << position.Z() << endl;
+    PositionFile << "Position: X: " << position->X() << "Y: " << position->Y() << "Z: " << position->Z() << endl;
 }
 
 //WriteReceivedPacket()
-void WriteReceivedPacket(string packet)
+void Demo::WriteReceivedPacket(string packet)
 {
     RecPacketFile << packet << endl;
 }
 
 //WriteSentPacket()
-void WriteSentPacket(string packet)
+void Demo::WriteSentPacket(string packet)
 {
     SentPacketFile << packet << endl;
 }
 
 //Initialize()
 //This will create the 3 text files,
-void Initialize()
+void Demo::Initialize()
 {
     PositionFile.open("Position.txt");
     RecPacketFile.open("PacketReceived.txt");
@@ -41,7 +42,7 @@ void Initialize()
 }
 
 //Close files
-void CloseFiles()
+void Demo::CloseFiles()
 {
     PositionFile.close();
     RecPacketFile.close();

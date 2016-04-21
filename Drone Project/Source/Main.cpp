@@ -2,9 +2,11 @@
 #include "Vector3D.h"
 #include <iostream>
 #include "CCode.h"
+#include "DroneInfo.h"
 
 //Enable the demo code
 #define DEMO 1
+
 #ifdef DEMO
 #include "Demo.h"
 #endif // DEMO
@@ -26,14 +28,17 @@ int main()
     if (Init(SelfIP.c_str()) != 1)
         cout << "Socket initialization failed." << endl;
 
-
-    Initialize();
+    //Creates the output files
+    Demo::Initialize();
     Coordinate3D *self, *target, *partner;
 	self = new Coordinate3D(50, 50, 100);
 	target = new Coordinate3D(550, 560, 100);
 
+	Demo::WritePosition(self);
 
+    DroneInfo* di = new DroneInfo("1 50 50 100 100");
 
+    Demo::WritePosition(self);
     return 0;
     #else // DEMO
 	Coordinate3D *leadDrone, *target;

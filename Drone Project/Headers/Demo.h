@@ -1,14 +1,23 @@
+#pragma once
+#include "Coordinate3D.h"
+#include <string>
+
+using std::string;
+
 //Demo code for writing to & from files goes here
+class Demo
+{
+public:
+static void WritePosition(Coordinate3D* position);
 
-//WritePosition()
+static void WriteReceivedPacket(string packet);
 
-//WriteRecievedPacket()
-
-//WriteSentPacket()
+static void WriteSentPacket(string packet);
 
 //Initialize()
 //This will create the 3 text files,
-void Initialize();
+static void Initialize();
 
 //Close the files
-void CloseFiles();
+static void CloseFiles();
+};

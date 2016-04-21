@@ -1,6 +1,7 @@
 #pragma once
 #include "Coordinate3D.h"
 #include <string>
+#include "Drone.h"
 
 using std::string;
 
@@ -20,4 +21,6 @@ static void Initialize();
 
 //Close the files
 static void CloseFiles();
+
+static void Move(Drone *drone, double speed);
 };

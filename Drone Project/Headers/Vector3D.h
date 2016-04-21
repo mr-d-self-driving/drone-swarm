@@ -19,7 +19,7 @@ public:
 	//Copy constructor
 	Vector3D(const Vector3D& copy);
 
-	double Dot(Vector3D rhs);
+	double Dot(Vector3D *rhs);
 
 	double Magnitude();
 
@@ -40,6 +40,10 @@ public:
 	Vector3D* operator/(double rhs);
 	//Rotate the vector in the z axis 'angle' degrees
 	Vector3D* RotateZ(double angle);
+
+	Vector3D* operator*(double rhs);
 };
 
 vector<Vector3D>* Repmat(Vector3D *vectorToRepeat, int timesToRepeat);
+
+Vector3D* Projection(Vector3D* of, Vector3D* onto);

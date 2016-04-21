@@ -6,6 +6,7 @@ using std::vector;
 using std::iterator;
 using std::sin;
 using std::cos;
+using std::pow;
 
 #define PI 3.14159265
 #define DegreeConversion (PI/180)
@@ -32,9 +33,9 @@ using std::cos;
 		z = copy.z;
 	}
 
-	double Vector3D::Dot(Vector3D rhs)
+	double Vector3D::Dot(Vector3D *rhs)
 	{
-		return ((x * rhs.x) + (y * rhs.y) + (z * rhs.z));
+		return ((x * rhs->x) + (y * rhs->y) + (z * rhs->z));
 	}
 
 	double Vector3D::Magnitude()
@@ -88,9 +89,9 @@ Vector3D* Vector3D::RotateZ(double angle)
 	rotationMatrixRowTwo = new Vector3D(x, y, z);
 	rotationMatrixRowThree = new Vector3D(0.0, 0.0, 1.0);
 
-	x = rotationMatrixRowOne->Dot(*this);//dot of row one
-	y = rotationMatrixRowTwo->Dot(*this);//dot of row two
-	z = rotationMatrixRowThree->Dot(*this);//dot of row three
+	x = rotationMatrixRowOne->Dot(this);//dot of row one
+	y = rotationMatrixRowTwo->Dot(this);//dot of row two
+	z = rotationMatrixRowThree->Dot(this);//dot of row three
 
 	Vector3D *result = new Vector3D(x, y, z);
 
@@ -125,4 +126,17 @@ void Vector3D::setY(double input)
 void Vector3D::setZ(double input)
 {
     z = input;
+}
+
+Vector3D* Projection(Vector3D *of, Vector3D *onto)
+{
+    double aDotb = of->Dot(onto);
+    double magASquared = pow(onto->Magnitude(), 2);
+    double scalar = aDotb / magASquared;
+    return new Vector3D(onto->X() * scalar, onto->Y() * scalar, onto->Z());
+}
+
+Vector3D* Vector3D::operator*(double rhs)
+{
+    return new Vector3D(this->X() * rhs, this->Y() * rhs, this->Z() * rhs);
 }

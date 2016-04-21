@@ -48,3 +48,12 @@ void Demo::CloseFiles()
     RecPacketFile.close();
     SentPacketFile.close();
 }
+
+void Demo::Move(Drone *drone, double speed)
+{
+    Coordinate3D *currentLocation = drone->info->GetLocation();
+    Vector3D *movementVector = *(drone->waypoint) - *currentLocation;
+    movementVector = movementVector->UnitVector();
+    movementVector = *(movementVector) * speed;
+    drone->info->SetLocation(currentLocation->X() + movementVector->X(), currentLocation->Y() + movementVector->Y(), currentLocation->Z() + movementVector->Z());
+}

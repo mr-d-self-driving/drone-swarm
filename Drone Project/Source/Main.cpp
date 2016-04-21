@@ -3,6 +3,7 @@
 #include <iostream>
 #include "CCode.h"
 #include "DroneInfo.h"
+#include "Drone.h"
 
 //Enable the demo code
 #define DEMO 1
@@ -30,38 +31,24 @@ int main()
 
     //Creates the output files
     Demo::Initialize();
-    Coordinate3D *self, *target, *partner;
-	self = new Coordinate3D(50, 50, 100);
-	target = new Coordinate3D(550, 560, 100);
 
-	Demo::WritePosition(self);
+    Coordinate3D *self, *target;
+	self = new Coordinate3D(50, 50 , 100);
+	target = new Coordinate3D(100, 100, 100);
 
-    DroneInfo* di = new DroneInfo("1 50 50 100 100");
+    DroneInfo *demoDroneInfo = new DroneInfo("1 50 50 100 100", true);
 
-    Demo::WritePosition(self);
+    Drone *demoDrone = new Drone(target, demoDroneInfo);
+    demoDrone->CalculateNewWaypoint();
+    for (int i = 0; i < 10; i++)
+    {
+        Demo::Move(demoDrone, 15.0f);
+        Demo::WritePosition(demoDrone->info->GetLocation());
+    }
+
     return 0;
     #else // DEMO
-	Coordinate3D *leadDrone, *target;
-	leadDrone = new Coordinate3D(49.0317, 50.8399, 100);
-	target = new Coordinate3D(550, 560, 100);
-	Vector3D *formationVector, *v1, *v2, *unitFormationVector;
-	//formationVector = *target - *leadDrone;
-	//formationVector = new Vector3D(500.9683, 509.1601, 0);
-
-	//from matlab
-	int formationSpeed = 4;
-
-	while (leadDrone != target)
-	{
-		formationVector = *target - *leadDrone;
-		v1 = formationVector->RotateZ((45 / 2) + 180);
-		v2 = formationVector->RotateZ(-(45 / 2) + 180);
-		unitFormationVector = formationVector->UnitVector();
-		leadDrone = *leadDrone + *unitFormationVector;
-		//cout << leadDrone->X() << ',' << leadDrone->Y() << ',' << leadDrone->Z() << endl;
-		cout << v1->X() << ',' << v1->Y() << ',' << v1->Z() << endl;
-	}
-
-	return 0;
+    cout << "Not demo" << endl;
+    return 0;
 	#endif // DEMO
 }

@@ -8,11 +8,12 @@
 //Calculate movement in (or into) formation
 
 //Decide on formation alignment (which side of the V to move on)
-
+#include "Drone.h"
 #include "Vector3D.h"
 #include <string>
 #include <stdlib.h>
 #include <math.h>
+#include "DroneInfo.h"
 
 using std::string;
 
@@ -73,9 +74,73 @@ double ComputeDistances(string Net, Vector3D *target)
     return result;
 }
 
+//Returns 1 if point is left of formation vector, -1 if to the right, and 0 if aligned
+int Orientation(const Coordinate3D *target, const Coordinate3D* leadDrone, const Coordinate3D *point)
+{
+    double result = ((target->X() - leadDrone->X()) * (point->Y() - leadDrone->Y())) - ((target->Y() - leadDrone->Y()) * (point->X() - leadDrone->X()));
+    if (result == 0)
+        return 0;
+    else if (result > 0)
+        return 1;
+    else
+        return -1;
+}
+
+Drone::Drone(Coordinate3D* targetIn, DroneInfo* position)
+{
+    this->target = targetIn;
+    this->info = position;
+    this->waypoint = nullptr;
+}
+
+void Drone::CalculateNewWaypoint()
+{
+    if(this->isLead)
+    {
+        this->waypoint = target;
+        return;
+    }
+
+
+    DroneInfo *leadDrone, *thisDrone;
+    Coordinate3D *target;
+
+    Coordinate3D *leadDronePosition = leadDrone->GetLocation();
+
+
+    //Formation vector is just a vector from the lead drone to the target.
+    //It is the overall vector the drones follow.
+    //vFormVector one and two extend from the lead drone and create the V the other drones should fly in
+    Vector3D *formationVector, *vFormVectorOne, *vFormVectorTwo, *vFormVectorToUse, *vectorToLeadDrone, *prjVecToLeadOnVForm;
+
+    formationVector = *target - *leadDronePosition;
+
+    vFormVectorOne = formationVector->RotateZ((45/2) + 180)->UnitVector();
+    vFormVectorTwo = formationVector->RotateZ((-45/2) + 180)->UnitVector();
+
+
+    if (Orientation(target, leadDronePosition, thisDrone->GetLocation()) > 0)
+        vFormVectorToUse = vFormVectorOne;
+    else
+        vFormVectorToUse = vFormVectorTwo;
+
+    vectorToLeadDrone = *leadDronePosition - (*thisDrone->GetLocation());
+
+    prjVecToLeadOnVForm = Projection(vectorToLeadDrone, vFormVectorToUse);
+
+    double wayX, wayY, wayZ;
+    wayX = leadDronePosition->X() - prjVecToLeadOnVForm->X();
+    wayY = leadDronePosition->Y() - prjVecToLeadOnVForm->Y();
+    wayZ = leadDronePosition->Z();
+
+    Coordinate3D *newWaypoint = new Coordinate3D(wayX, wayY, wayZ);
+    waypoint = newWaypoint;
+}
+
 //Starts calculating the positions of each drone and where they need to go in order to fly in a V formation
 void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDrone, double formationDistance, Vector3D *target, int num_drones)
 {
+    /*
     int formationSpeed = 4;
     Vector3D *leadDroneChange = new Vector3D(*(*formationVector / formationDistance));
 
@@ -255,10 +320,11 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
         counter++;
     }
 
-/*******************************************************************************************
+//******************************************************************************************
 // TODO
 // CollisionAvoidence:
-********************************************************************************************/
+//******************************************************************************************
+    //Ignoring collision avoidance for now
     vector<Vector3D> *collisionAvoidenceVector = new vector<Vector3D>(num_drones);
     // collisionAvoidenceVector = avoidCollisions(Net, StateChanges, num_drones);
     // we pass in StateChanges here, aka what we want the drones to do
@@ -294,8 +360,8 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
 
     // There are code for dead drones. It just moves dead drones down 1 unit on the z axis.
     // sim only, so skipping.
+    */
 }
-
 void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones)
 {
     int minCollisionDistance = 12;
@@ -565,4 +631,3 @@ void NetOut(string Net[], int State, Vector3D *target, int num_drones, int forma
 
     //I did not include anything after the switch statement from matlab as it didn't seem to be relevant or useful at this time.
 }
-

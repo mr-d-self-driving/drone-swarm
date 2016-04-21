@@ -75,18 +75,20 @@
 	"Vector3D.h"
 	"Coordinate3D.h"
 
-1460403100 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\headers\vector3d.h
+1461281320 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\headers\vector3d.h
 	<cmath>
 	<vector>
 
 1459281079 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\headers\coordinate3d.h
 	"Vector3D.h"
 
-1461265523 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\drone.cpp
+1461280659 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\drone.cpp
+	"Drone.h"
 	"Vector3D.h"
 	<string>
 	<stdlib.h>
 	<math.h>
+	"DroneInfo.h"
 
 1459281079 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\test.cpp
 	<iostream>
@@ -99,34 +101,40 @@
 	<string.h>
 	<arpa/inet.h>
 
-1460403100 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\vector3d.cpp
+1461281301 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\vector3d.cpp
 	<cmath>
 	<vector>
 	"Vector3D.h"
 
-1461263465 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\demo.cpp
+1461281366 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\demo.cpp
 	"Demo.h"
 	<fstream>
 	<iostream>
 	"Coordinate3D.h"
 
-1461263700 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\main.cpp
+1461281444 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\main.cpp
 	"Coordinate3D.h"
 	"Vector3D.h"
 	<iostream>
 	"CCode.h"
 	"DroneInfo.h"
+	"Drone.h"
 	"Demo.h"
 
-1461263539 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\headers\demo.h
+1461281006 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\headers\demo.h
 	"Coordinate3D.h"
 	<string>
+	"Drone.h"
 
-1461263245 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\droneinfo.cpp
+1461280148 source:c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\source\droneinfo.cpp
 	"DroneInfo.h"
 	<sstream>
 
-1461263189 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\headers\droneinfo.h
+1461280290 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\headers\droneinfo.h
 	"Coordinate3D.h"
 	<string>
+
+1461280674 c:\users\dylan\documents\uofl\spring 2016\capstone\drone project\drone project\drone project\headers\drone.h
+	"DroneInfo.h"
+	"Coordinate3D.h"
 

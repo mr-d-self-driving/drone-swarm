@@ -9,7 +9,7 @@ bool DroneInfo::isAlive()
 }
 
 //ID:X:Y:Z:Battery
-DroneInfo::DroneInfo(string Net)
+DroneInfo::DroneInfo(string Net, bool lead)
 {
     istringstream stream(Net);
     int id;
@@ -18,6 +18,7 @@ DroneInfo::DroneInfo(string Net)
     this->ID = id;
     this->location = new Coordinate3D(x, y, z);
     this->battery = bat;
+    this->LeadDrone = lead;
 }
 
 DroneInfo::~DroneInfo()
@@ -43,4 +44,9 @@ double DroneInfo::GetBattery()
 void DroneInfo::SetBattery(float batteryLevel)
 {
     battery = batteryLevel;
+}
+
+bool DroneInfo::isLead()
+{
+    return LeadDrone;
 }

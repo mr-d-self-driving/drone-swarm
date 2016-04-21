@@ -12,6 +12,8 @@ private:
     //Drones battery life remaining
     double battery;
 
+    bool LeadDrone;
+
 public:
 
     //ID number of the drone
@@ -20,7 +22,9 @@ public:
     //Returns true if battery > 0, otherwise returns false
     bool isAlive();
 
-    DroneInfo(string Net);
+    bool isLead();
+
+    DroneInfo(string Net, bool lead);
 
     ~DroneInfo();
 

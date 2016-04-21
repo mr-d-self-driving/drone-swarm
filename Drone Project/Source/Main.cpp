@@ -37,13 +37,19 @@ int main()
 	target = new Coordinate3D(100, 100, 100);
 
     DroneInfo *demoDroneInfo = new DroneInfo("1 50 50 100 100", true);
+    DroneInfo *demoDroneInfoTwo = new DroneInfo("2 40 40 100 100", false);
 
     Drone *demoDrone = new Drone(target, demoDroneInfo);
+    Drone *demoDroneTwo = new Drone(target, demoDroneInfoTwo);
     demoDrone->CalculateNewWaypoint();
+    demoDroneTwo->CalculateNewWaypoint();
     for (int i = 0; i < 10; i++)
     {
-        Demo::Move(demoDrone, 15.0f);
+        Demo::Move(demoDrone, 5.0f);
+        Demo::Move(demoDroneTwo, 5.0f);
+        demoDroneTwo->CalculateNewWaypoint();
         Demo::WritePosition(demoDrone->info->GetLocation());
+        Demo::WritePositionTwo(demoDroneTwo->info->GetLocation());
     }
 
     return 0;

@@ -9,12 +9,17 @@ using std::cout;
 using std::endl;
 using std::string;
 
-ofstream PositionFile, RecPacketFile, SentPacketFile;
+ofstream PositionFile, PositionFileTwo, RecPacketFile, SentPacketFile;
 
 //WritePosition()
 void Demo::WritePosition(Coordinate3D* position )
 {
     PositionFile << "Position: X: " << position->X() << "Y: " << position->Y() << "Z: " << position->Z() << endl;
+}
+
+void Demo::WritePositionTwo(Coordinate3D* position )
+{
+    PositionFileTwo << "Position: X: " << position->X() << "Y: " << position->Y() << "Z: " << position->Z() << endl;
 }
 
 //WriteReceivedPacket()
@@ -34,6 +39,7 @@ void Demo::WriteSentPacket(string packet)
 void Demo::Initialize()
 {
     PositionFile.open("Position.txt");
+    PositionFileTwo.open("Position2.txt");
     RecPacketFile.open("PacketReceived.txt");
     SentPacketFile.open("PacketSent.txt");
 

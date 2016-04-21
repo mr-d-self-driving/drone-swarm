@@ -11,6 +11,8 @@ class Demo
 public:
 static void WritePosition(Coordinate3D* position);
 
+static void WritePositionTwo(Coordinate3D* position);
+
 static void WriteReceivedPacket(string packet);
 
 static void WriteSentPacket(string packet);

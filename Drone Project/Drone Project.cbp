@@ -32,6 +32,7 @@
 		<Unit filename="Headers/CCode.h" />
 		<Unit filename="Headers/Coordinate3D.h" />
 		<Unit filename="Headers/Demo.h" />
+		<Unit filename="Headers/Drone.h" />
 		<Unit filename="Headers/DroneInfo.h" />
 		<Unit filename="Headers/Vector3D.h" />
 		<Unit filename="Source/Coordinate3D.cpp" />

@@ -1,7 +1,10 @@
 #include "DroneInfo.h"
 #include <sstream>
+#include <string>
 
 using std::istringstream;
+using std::ostringstream;
+using std::endl;
 
 bool DroneInfo::isAlive()
 {
@@ -49,4 +52,11 @@ void DroneInfo::SetBattery(float batteryLevel)
 bool DroneInfo::isLead()
 {
     return LeadDrone;
+}
+
+string DroneInfo::ToString()
+{
+    ostringstream stream;
+    stream << ID << " " << location->X() << " " << location->Y() << " " << location->Z() << " " << battery;
+    return stream.str();
 }

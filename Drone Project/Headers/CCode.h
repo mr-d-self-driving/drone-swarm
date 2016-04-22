@@ -30,7 +30,7 @@ struct sockaddr_in remoteAddr; //Stores info for other unit
 socklen_t addrlen = sizeof(myAddr);
 
 //messageBufferfer to store data, change from character to something else later, message sent is a void *
-unsigned char messageBuffer[BUFFERSIZE];
+char messageBuffer[BUFFERSIZE];
 
 
 //Might not be needed, only for testing completeness of data, we could make sure sent messages are always constant lengths, pad with 0 if needed?
@@ -78,7 +78,7 @@ int SetSendTo(const char * IPAddr)
 }
 
 //Sends a character message to remoteAddr. Returns 0 on failure, 1 on success.
-int SendMessage(unsigned char * message)
+int SendMessage(char * message)
 {
 	//sendto(int socketDescriptor, void * message, length of message, flag
 	//	sockaddr * addressToSendTo, sizeof sockaddr)
@@ -91,7 +91,7 @@ int SendMessage(unsigned char * message)
 }
 
 //Recieves a message sent to the address in myAddr. Returns NULL on failure.
-unsigned char * RecieveMessage()
+char * RecieveMessage()
 {
 	//Holds the data on the message sender
 	struct sockaddr_in remoteAddr;

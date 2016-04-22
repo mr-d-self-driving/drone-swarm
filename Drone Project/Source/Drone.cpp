@@ -93,17 +93,17 @@ Drone::Drone(Coordinate3D* targetIn, DroneInfo* position)
     this->waypoint = nullptr;
 }
 
-void Drone::CalculateNewWaypoint()
+void Drone::CalculateNewWaypoint(DroneInfo *leadDrone)
 {
-    if(this->isLead)
+    if(this->info->isLead())
     {
         this->waypoint = target;
         return;
     }
 
 
-    DroneInfo *leadDrone, *thisDrone;
-    Coordinate3D *target;
+    DroneInfo *thisDrone = this->info;
+    Coordinate3D *target = this->target;
 
     Coordinate3D *leadDronePosition = leadDrone->GetLocation();
 

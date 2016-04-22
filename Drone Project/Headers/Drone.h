@@ -8,7 +8,6 @@ public:
     DroneInfo* info;
     Coordinate3D* waypoint;
     Coordinate3D* target;
-    bool isLead;
-    void CalculateNewWaypoint();
+    void CalculateNewWaypoint(DroneInfo* leadDrone);
     Drone(Coordinate3D* target, DroneInfo* position);
 };

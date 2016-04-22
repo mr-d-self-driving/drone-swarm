@@ -35,4 +35,6 @@ public:
     double GetBattery();
 
     void SetBattery(float batteryLevel);
+
+    string ToString();
 };

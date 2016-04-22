@@ -4,6 +4,7 @@
 #include "CCode.h"
 #include "DroneInfo.h"
 #include "Drone.h"
+#include <unistd.h>
 
 //Enable the demo code
 #define DEMO 1
@@ -29,6 +30,8 @@ int main()
     if (Init(SelfIP.c_str()) != 1)
         cout << "Socket initialization failed." << endl;
 
+    SetSendTo(PartnerIP.c_str());
+
     //Creates the output files
     Demo::Initialize();
 
@@ -36,20 +39,41 @@ int main()
 	self = new Coordinate3D(50, 50 , 100);
 	target = new Coordinate3D(100, 100, 100);
 
+	//Network lead drone
     DroneInfo *demoDroneInfo = new DroneInfo("1 50 50 100 100", true);
-    DroneInfo *demoDroneInfoTwo = new DroneInfo("2 40 40 100 100", false);
+    DroneInfo *leadDrone = demoDroneInfo;
+
+    /*
+    //Network not lead
+    DroneInfo *demoDroneInfo = new DroneInfo("1 40 40 100 100", false);
+    DroneInfo *leadDrone = new DroneInfo("1 50 50 100 100", true);
+
+    */
+    //DroneInfo *demoDroneInfoTwo = new DroneInfo("2 40 40 100 100", false);
 
     Drone *demoDrone = new Drone(target, demoDroneInfo);
-    Drone *demoDroneTwo = new Drone(target, demoDroneInfoTwo);
-    demoDrone->CalculateNewWaypoint();
-    demoDroneTwo->CalculateNewWaypoint();
+    //Drone *demoDroneTwo = new Drone(target, demoDroneInfoTwo);
+    demoDrone->CalculateNewWaypoint(leadDrone);
+    //demoDroneTwo->CalculateNewWaypoint();
     for (int i = 0; i < 10; i++)
     {
         Demo::Move(demoDrone, 5.0f);
-        Demo::Move(demoDroneTwo, 5.0f);
-        demoDroneTwo->CalculateNewWaypoint();
+        demoDrone->CalculateNewWaypoint(leadDrone);
+        cout << demoDroneInfo->ToString();
+        Demo::WriteSentPacket(demoDrone->info->ToString());
+        string messageOut = demoDrone->info->ToString();
+        char packetOut [messageOut.size()];
+        strcpy(packetOut, messageOut.c_str());
+        SendMessage(packetOut);
+        sleep(1);
+        string message(RecieveMessage());
+        Demo::WriteReceivedPacket(message);
+        if (!demoDroneInfo->isLead())
+            leadDrone = new DroneInfo(message, true);
+        //Demo::Move(demoDroneTwo, 5.0f);
+        //demoDroneTwo->CalculateNewWaypoint();
         Demo::WritePosition(demoDrone->info->GetLocation());
-        Demo::WritePositionTwo(demoDroneTwo->info->GetLocation());
+        //Demo::WritePositionTwo(demoDroneTwo->info->GetLocation());
     }
 
     return 0;

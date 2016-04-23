@@ -9,6 +9,7 @@ screen=pygame.display.set_mode((640, 480))
 black=pygame.Color("black")
 white=pygame.Color("white")
 yellow=pygame.Color("yellow")
+red=pygame.Color("red")
 pygame.mouse.set_visible(False)
 FPS = 10
 clock = pygame.time.Clock()
@@ -28,6 +29,7 @@ def main():
 	x2 = 0.0
 	y2 = 0.0
 	z2 = 0.0
+	pygame.draw.polygon(screen, white, ((100-5, 100), (100+5, 100), (100, 100+5)), 0)
 	while 1:
 		line = f1.readline()
 		if(line != ''):
@@ -41,9 +43,10 @@ def main():
 		if(line != ''):
 			pygame.draw.polygon(screen, black, ((x2-5, y2), (x2+5, y2), (x2, y2+5)), 0)
 			x2,y2,z2 = parse(line)
-			pygame.draw.polygon(screen, yellow, ((x2-5, y2), (x2+5, y2), (x2, y2+5)), 0)
+			pygame.draw.polygon(screen, red, ((x2-5, y2), (x2+5, y2), (x2, y2+5)), 0)
 		pygame.display.update()
 		clock.tick(FPS)
+	pygame.quit()
 
 		
 if __name__=='__main__':

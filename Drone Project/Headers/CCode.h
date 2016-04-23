@@ -98,7 +98,7 @@ char * RecieveMessage()
 
 	//recieve message from socket
 	//Parameters: socket, buffer, buffer length, flags, struct to store info on sender, size of that struct
-	bytesRecieved = recvfrom(ourSocketDescriptor, messageBuffer, BUFFERSIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
+	bytesRecieved = recvfrom(ourSocketDescriptor, messageBuffer, BUFFERSIZE, MSG_DONTWAIT, (struct sockaddr *)&remoteAddr, &addrlen);
 	//printf("received %d bytes\n", bytesRecieved);
 	if (bytesRecieved > 0) {
 			messageBuffer[bytesRecieved] = 0;

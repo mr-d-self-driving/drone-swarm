@@ -24,8 +24,8 @@ int main()
     cout << "Demo detected" << endl;
 
     string SelfIP, PartnerIP;
-    SelfIP = "";
-    PartnerIP = "";
+    SelfIP = "192.168.1.50";
+    PartnerIP = "192.168.1.150";
 
     if (Init(SelfIP.c_str()) != 1)
         cout << "Socket initialization failed." << endl;
@@ -39,6 +39,7 @@ int main()
 	self = new Coordinate3D(50, 50 , 100);
 	target = new Coordinate3D(100, 100, 100);
 
+
 	//Network lead drone
     DroneInfo *demoDroneInfo = new DroneInfo("1 50 50 100 100", true);
     DroneInfo *leadDrone = demoDroneInfo;
@@ -47,8 +48,8 @@ int main()
     //Network not lead
     DroneInfo *demoDroneInfo = new DroneInfo("1 40 40 100 100", false);
     DroneInfo *leadDrone = new DroneInfo("1 50 50 100 100", true);
-
     */
+
     //DroneInfo *demoDroneInfoTwo = new DroneInfo("2 40 40 100 100", false);
 
     Drone *demoDrone = new Drone(target, demoDroneInfo);
@@ -57,25 +58,24 @@ int main()
     //demoDroneTwo->CalculateNewWaypoint();
     for (int i = 0; i < 10; i++)
     {
+        //cout << "Iteration: " << i << endl;
         Demo::Move(demoDrone, 5.0f);
         demoDrone->CalculateNewWaypoint(leadDrone);
-        cout << demoDroneInfo->ToString();
         Demo::WriteSentPacket(demoDrone->info->ToString());
         string messageOut = demoDrone->info->ToString();
+        //cout << "Message Out: " << messageOut << endl;
         char packetOut [messageOut.size()];
         strcpy(packetOut, messageOut.c_str());
         SendMessage(packetOut);
-        sleep(1);
+        //cout << "Message sent." << endl;
+        sleep(0.2);
         string message(RecieveMessage());
+        //cout << "Message recieved: " << message << endl;
         Demo::WriteReceivedPacket(message);
         if (!demoDroneInfo->isLead())
             leadDrone = new DroneInfo(message, true);
-        //Demo::Move(demoDroneTwo, 5.0f);
-        //demoDroneTwo->CalculateNewWaypoint();
         Demo::WritePosition(demoDrone->info->GetLocation());
-        //Demo::WritePositionTwo(demoDroneTwo->info->GetLocation());
     }
-
     return 0;
     #else // DEMO
     cout << "Not demo" << endl;

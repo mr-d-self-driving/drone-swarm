@@ -1,63 +1,54 @@
 #include <iostream>
 #include "CCode.h"
 
+int NetworkTest() {
+  std::string hostIP, remoteIP;
+  std::cout << "Enter host ip address" << std::endl;
+  std::cin >> hostIP;
 
-using std::cout;
-using std::endl;
-using std::cin;
-using std::string;
+  std::cout << "Enter destination ip address" << std::endl;
+  std::cin >> remoteIP;
 
+  const char *hostIPCString, *remoteIPCString;
 
-int NetworkTest()
-{
-	string hostIP, remoteIP;
-	cout << "Enter host ip address" << endl;
-	cin >> hostIP;
+  hostIPCString = hostIP.c_str();
+  remoteIPCString = remoteIP.c_str();
 
-	cout << "Enter destination ip address" << endl;
-	cin >> remoteIP;
+  if (Init(hostIPCString) < 1) {
+    std::cout << "Init failed" << std::endl;
+    return -1;
+  }
 
-	const char *hostIPCString, *remoteIPCString;
+  if (SetSendTo(remoteIPCString) < 1) {
+    std::cout << "Set remote failed" << std::endl;
+    return -1;
+  }
 
-	hostIPCString = hostIP.c_str();
-	remoteIPCString = remoteIP.c_str();
+  std::cout << "Init complete" << std::endl;
 
-	if (Init(hostIPCString) < 1)
-	{
-		cout << "Init failed" << endl;
-		return -1;
-	}
-
-	if (SetSendTo(remoteIPCString) < 1)
-	{
-		cout << "Set remote failed" << endl;
-		return -1;
-	}
-
-	cout << "Init complete" << endl;
-
-	unsigned char message[2048];
-	bool exit = false;
-	while(!exit)
-	{
-		cout << "Menu:" << endl << "1) Send message" << endl << "2) Recieve message" << endl << "3) Exit" << endl;
-		int menuSelection;
-		cin >> menuSelection;
-		switch(menuSelection)
-		{
-			case 1:
-				cout << "Enter message" << endl;
-				cin >> message;
-				SendMessage(message);
-				break;
-			case 2:
-				//message = RecieveMessage();
-				cout << "Message: " << message << endl;
-				break;
-			case 3:
-				exit = true;
-				break;
-		}
-	}
-	return 0;
+  unsigned char message[2048];
+  bool exit = false;
+  while (!exit) {
+    std::cout << "Menu:" << std::endl
+              << "1) Send message" << std::endl
+              << "2) Recieve message" << std::endl
+              << "3) Exit" << std::endl;
+    int menuSelection;
+    std::cin >> menuSelection;
+    switch (menuSelection) {
+      case 1:
+        std::cout << "Enter message" << std::endl;
+        std::cin >> message;
+        SendMessage(message);
+        break;
+      case 2:
+        // message = RecieveMessage();
+        std::cout << "Message: " << message << std::endl;
+        break;
+      case 3:
+        exit = true;
+        break;
+    }
+  }
+  return 0;
 }

@@ -6,79 +6,70 @@
 #include "Drone.h"
 #include <unistd.h>
 
-//Enable the demo code
+// Enable the demo code
 #define DEMO 1
 
 #ifdef DEMO
 #include "Demo.h"
-#endif // DEMO
+#endif  // DEMO
 
-using std::cout;
-using std::endl;
-using std::string;
+int main() {
+#ifdef DEMO
+  std::cout << "Demo detected" << std::endl;
 
-int main()
-{
+  std::string SelfIP, PartnerIP;
+  SelfIP = "192.168.1.50";
+  PartnerIP = "192.168.1.150";
 
-    #ifdef DEMO
-    cout << "Demo detected" << endl;
+  if (Init(SelfIP.c_str()) != 1)
+    std::cout << "Socket initialization failed." << std::endl;
 
-    string SelfIP, PartnerIP;
-    SelfIP = "192.168.1.50";
-    PartnerIP = "192.168.1.150";
+  SetSendTo(PartnerIP.c_str());
 
-    if (Init(SelfIP.c_str()) != 1)
-        cout << "Socket initialization failed." << endl;
+  // Creates the output files
+  Demo::Initialize();
 
-    SetSendTo(PartnerIP.c_str());
+  Coordinate3D *self, *target;
+  self = new Coordinate3D(50, 50, 100);
+  target = new Coordinate3D(100, 100, 100);
 
-    //Creates the output files
-    Demo::Initialize();
+  // Network lead drone
+  DroneInfo *demoDroneInfo = new DroneInfo("1 50 50 100 100", true);
+  DroneInfo *leadDrone = demoDroneInfo;
 
-    Coordinate3D *self, *target;
-	self = new Coordinate3D(50, 50 , 100);
-	target = new Coordinate3D(100, 100, 100);
+  /*
+  //Network not lead
+  DroneInfo *demoDroneInfo = new DroneInfo("1 40 40 100 100", false);
+  DroneInfo *leadDrone = new DroneInfo("1 50 50 100 100", true);
+  */
 
+  // DroneInfo *demoDroneInfoTwo = new DroneInfo("2 40 40 100 100", false);
 
-	//Network lead drone
-    DroneInfo *demoDroneInfo = new DroneInfo("1 50 50 100 100", true);
-    DroneInfo *leadDrone = demoDroneInfo;
-
-    /*
-    //Network not lead
-    DroneInfo *demoDroneInfo = new DroneInfo("1 40 40 100 100", false);
-    DroneInfo *leadDrone = new DroneInfo("1 50 50 100 100", true);
-    */
-
-    //DroneInfo *demoDroneInfoTwo = new DroneInfo("2 40 40 100 100", false);
-
-    Drone *demoDrone = new Drone(target, demoDroneInfo);
-    //Drone *demoDroneTwo = new Drone(target, demoDroneInfoTwo);
+  Drone *demoDrone = new Drone(target, demoDroneInfo);
+  // Drone *demoDroneTwo = new Drone(target, demoDroneInfoTwo);
+  demoDrone->CalculateNewWaypoint(leadDrone);
+  // demoDroneTwo->CalculateNewWaypoint();
+  for (int i = 0; i < 10; i++) {
+    // cout << "Iteration: " << i << endl;
+    Demo::Move(demoDrone, 5.0f);
     demoDrone->CalculateNewWaypoint(leadDrone);
-    //demoDroneTwo->CalculateNewWaypoint();
-    for (int i = 0; i < 10; i++)
-    {
-        //cout << "Iteration: " << i << endl;
-        Demo::Move(demoDrone, 5.0f);
-        demoDrone->CalculateNewWaypoint(leadDrone);
-        Demo::WriteSentPacket(demoDrone->info->ToString());
-        string messageOut = demoDrone->info->ToString();
-        //cout << "Message Out: " << messageOut << endl;
-        char packetOut [messageOut.size()];
-        strcpy(packetOut, messageOut.c_str());
-        SendMessage(packetOut);
-        //cout << "Message sent." << endl;
-        sleep(0.2);
-        string message(RecieveMessage());
-        //cout << "Message recieved: " << message << endl;
-        Demo::WriteReceivedPacket(message);
-        if (!demoDroneInfo->isLead())
-            leadDrone = new DroneInfo(message, true);
-        Demo::WritePosition(demoDrone->info->GetLocation());
-    }
-    return 0;
-    #else // DEMO
-    cout << "Not demo" << endl;
-    return 0;
-	#endif // DEMO
+    Demo::WriteSentPacket(demoDrone->info->ToString());
+    std::string messageOut = demoDrone->info->ToString();
+    // cout << "Message Out: " << messageOut << endl;
+    char packetOut[messageOut.size()];
+    strcpy(packetOut, messageOut.c_str());
+    SendMessage(packetOut);
+    // cout << "Message sent." << endl;
+    sleep(0.2);
+    std::string message(RecieveMessage());
+    // cout << "Message recieved: " << message << endl;
+    Demo::WriteReceivedPacket(message);
+    if (!demoDroneInfo->isLead()) leadDrone = new DroneInfo(message, true);
+    Demo::WritePosition(demoDrone->info->GetLocation());
+  }
+  return 0;
+#else   // DEMO
+  std::cout << "Not demo" << std::endl;
+  return 0;
+#endif  // DEMO
 }

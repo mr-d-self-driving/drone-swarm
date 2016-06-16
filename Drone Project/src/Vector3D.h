@@ -2,48 +2,45 @@
 #include <cmath>
 #include <vector>
 
-using std::vector;
-using std::iterator;
+class Vector3D {
+ private:
+  double x, y, z;
 
-class Vector3D
-{
-private:
-	double x, y, z;
-public:
-	//Constructor w/ initialization
-	Vector3D(double xIn, double yIn, double zIn);
+ public:
+  // Constructor w/ initialization
+  Vector3D(double xIn, double yIn, double zIn);
 
-	//Empty constructor
-	Vector3D();
+  // Empty constructor
+  Vector3D();
 
-	//Copy constructor
-	Vector3D(const Vector3D& copy);
+  // Copy constructor
+  Vector3D(const Vector3D& copy);
 
-	double Dot(Vector3D *rhs);
+  double Dot(Vector3D* rhs);
 
-	double Magnitude();
+  double Magnitude();
 
-	double X() const;
+  double X() const;
 
-	double Y() const;
+  double Y() const;
 
-	double Z() const;
+  double Z() const;
 
-    void setX(double input);
+  void setX(double input);
 
-	void setY(double input);
+  void setY(double input);
 
-	void setZ(double input);
+  void setZ(double input);
 
-	Vector3D* UnitVector();
+  Vector3D* UnitVector();
 
-	Vector3D* operator/(double rhs);
-	//Rotate the vector in the z axis 'angle' degrees
-	Vector3D* RotateZ(double angle);
+  Vector3D* operator/(double rhs);
+  // Rotate the vector in the z axis 'angle' degrees
+  Vector3D* RotateZ(double angle);
 
-	Vector3D* operator*(double rhs);
+  Vector3D* operator*(double rhs);
 };
 
-vector<Vector3D>* Repmat(Vector3D *vectorToRepeat, int timesToRepeat);
+std::vector<Vector3D>* Repmat(Vector3D* vectorToRepeat, int timesToRepeat);
 
 Vector3D* Projection(Vector3D* of, Vector3D* onto);

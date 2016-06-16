@@ -2,39 +2,35 @@
 #include "Coordinate3D.h"
 #include <string>
 
-using std::string;
+class DroneInfo {
+ private:
+  // Represents the drones location
+  Coordinate3D* location;
+  // Drones battery life remaining
+  double battery;
 
-class DroneInfo
-{
-private:
-    //Represents the drones location
-    Coordinate3D* location;
-    //Drones battery life remaining
-    double battery;
+  bool LeadDrone;
 
-    bool LeadDrone;
+ public:
+  // ID number of the drone
+  int ID;
 
-public:
+  // Returns true if battery > 0, otherwise returns false
+  bool isAlive();
 
-    //ID number of the drone
-    int ID;
+  bool isLead();
 
-    //Returns true if battery > 0, otherwise returns false
-    bool isAlive();
+  DroneInfo(std::string Net, bool lead);
 
-    bool isLead();
+  ~DroneInfo();
 
-    DroneInfo(string Net, bool lead);
+  Coordinate3D* GetLocation();
 
-    ~DroneInfo();
+  void SetLocation(float x, float y, float z);
 
-    Coordinate3D* GetLocation();
+  double GetBattery();
 
-    void SetLocation(float x, float y, float z);
+  void SetBattery(float batteryLevel);
 
-    double GetBattery();
-
-    void SetBattery(float batteryLevel);
-
-    string ToString();
+  std::string ToString();
 };

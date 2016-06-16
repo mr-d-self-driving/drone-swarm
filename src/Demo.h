@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DEMO_H_
+#define DEMO_H_
+
 #include "Coordinate3D.h"
 #include <string>
 #include "Drone.h"
@@ -23,3 +25,5 @@ class Demo {
 
   static void Move(Drone* drone, double speed);
 };
+
+#endif

@@ -26,7 +26,7 @@ int NetworkTest() {
 
   std::cout << "Init complete" << std::endl;
 
-  unsigned char message[2048];
+  char message[2048];
   bool exit = false;
   while (!exit) {
     std::cout << "Menu:" << std::endl

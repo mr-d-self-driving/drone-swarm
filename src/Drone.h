@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DRONE_H_
+#define DRONE_H_
+
 #include "DroneInfo.h"
 #include "Coordinate3D.h"
 
@@ -10,3 +12,5 @@ class Drone {
   void CalculateNewWaypoint(DroneInfo* leadDrone);
   Drone(Coordinate3D* target, DroneInfo* position);
 };
+
+#endif

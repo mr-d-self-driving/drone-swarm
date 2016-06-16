@@ -1,4 +1,6 @@
-#pragma once
+#ifndef COORDINATE3D_H_
+#define COORDINATE3D_H_
+
 #include "Vector3D.h"
 
 class Coordinate3D {
@@ -31,3 +33,5 @@ bool operator==(const Coordinate3D& lhs, const Coordinate3D& rhs);
 bool operator!=(const Coordinate3D& lhs, const Coordinate3D& rhs);
 
 Coordinate3D* operator+(Coordinate3D& lhs, const Vector3D& rhs);
+
+#endif // COORDINATE3D_H_

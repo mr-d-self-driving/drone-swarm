@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DRONEINFO_H_
+#define DRONEINFO_H_
+
 #include "Coordinate3D.h"
 #include <string>
 
@@ -34,3 +36,5 @@ class DroneInfo {
 
   std::string ToString();
 };
+
+#endif

@@ -5,7 +5,7 @@
 bool DroneInfo::isAlive() { return (battery > 0); }
 
 // ID:X:Y:Z:Battery
-DroneInfo::DroneInfo(string Net, bool lead) {
+DroneInfo::DroneInfo(std::string Net, bool lead) {
   std::istringstream stream(Net);
   int id;
   double x, y, z, bat;
@@ -30,7 +30,7 @@ void DroneInfo::SetBattery(float batteryLevel) { battery = batteryLevel; }
 
 bool DroneInfo::isLead() { return LeadDrone; }
 
-string DroneInfo::ToString() {
+std::string DroneInfo::ToString() {
   std::ostringstream stream;
   stream << ID << " " << location->X() << " " << location->Y() << " "
          << location->Z() << " " << battery;

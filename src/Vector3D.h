@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VECTOR3D_H_
+#define VECTOR3D_H_
+
 #include <cmath>
 #include <vector>
 
@@ -44,3 +46,5 @@ class Vector3D {
 std::vector<Vector3D>* Repmat(Vector3D* vectorToRepeat, int timesToRepeat);
 
 Vector3D* Projection(Vector3D* of, Vector3D* onto);
+
+#endif

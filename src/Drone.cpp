@@ -27,7 +27,7 @@ std::string ParseNet(std::string tempStringForParsing, int value_to_return) {
 
   // Searches the string and breaks it apart based on the ':' delimiter
   // Stores relevant information in appropriate variable
-  while ((pos = tempStringForParsing.find(delimiter) != string::npos)) {
+  while ((pos = tempStringForParsing.find(delimiter) != std::string::npos)) {
     token = tempStringForParsing.substr(0, pos);
     if (value_to_return == counter) {
       return id;
@@ -536,7 +536,7 @@ void avoidCollision(std::string Net[], std::vector<Vector3D> &changeVector,
     counter++;
   }
 
-  std::vector<Vector3D> *uvbpt = new vector<Vector3D>(numDronesLiving);
+  std::vector<Vector3D> *uvbpt = new std::vector<Vector3D>(numDronesLiving);
   counter = 0;
   for (auto iter = uvbpt->begin(); iter != uvbpt->end(); iter++) {
     Vector3D *temp =

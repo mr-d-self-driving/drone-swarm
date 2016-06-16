@@ -1,6 +1,10 @@
-#ifdef cplusplus_
+#pragma once
+#ifndef CCODE_H_
+#define CCODE_H_
+
+//#ifdef cplusplus_
 extern "C" {
-#endif
+//#endif
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -115,6 +119,8 @@ char *RecieveMessage() {
   return NULL;
 }
 
-#ifdef cplusplus_
+//#ifdef cplusplus_
 }
-#endif
+//#endif
+
+#endif // CCODE_H_

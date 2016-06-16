@@ -140,3 +140,33 @@
 	"DroneInfo.h"
 	"Coordinate3D.h"
 
+1466022230 source:/home/aaron/git/drone-swarm/Drone Project/src/Coordinate3D.cpp
+	"Vector3D.h"
+	"Coordinate3D.h"
+
+1466012680 /home/aaron/git/drone-swarm/Drone Project/src/Vector3D.h
+	<cmath>
+	<vector>
+
+1466012680 /home/aaron/git/drone-swarm/Drone Project/src/Coordinate3D.h
+	"Vector3D.h"
+
+1466016909 source:/home/aaron/git/drone-swarm/Drone Project/src/Demo.cpp
+	"Demo.h"
+	<fstream>
+	<iostream>
+	"Coordinate3D.h"
+
+1466012680 /home/aaron/git/drone-swarm/Drone Project/src/Demo.h
+	"Coordinate3D.h"
+	<string>
+	"Drone.h"
+
+1466012680 /home/aaron/git/drone-swarm/Drone Project/src/Drone.h
+	"DroneInfo.h"
+	"Coordinate3D.h"
+
+1466012680 /home/aaron/git/drone-swarm/Drone Project/src/DroneInfo.h
+	"Coordinate3D.h"
+	<string>
+

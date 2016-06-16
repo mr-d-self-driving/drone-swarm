@@ -4,13 +4,13 @@
 	<Project>
 		<Option title="Drone Project" />
 		<Option pch_mode="2" />
-		<Option compiler="cygwin" />
+		<Option compiler="raspberry_pi" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Drone Project" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="cygwin" />
+				<Option compiler="raspberry_pi" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="Headers" />
@@ -20,7 +20,7 @@
 				<Option output="bin/Release/Drone Project" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
-				<Option compiler="cygwin" />
+				<Option compiler="raspberry_pi" />
 				<Compiler>
 					<Add option="-O2" />
 				</Compiler>
@@ -29,18 +29,19 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="Headers/CCode.h" />
-		<Unit filename="Headers/Coordinate3D.h" />
-		<Unit filename="Headers/Demo.h" />
-		<Unit filename="Headers/Drone.h" />
-		<Unit filename="Headers/DroneInfo.h" />
-		<Unit filename="Headers/Vector3D.h" />
-		<Unit filename="Source/Coordinate3D.cpp" />
-		<Unit filename="Source/Demo.cpp" />
-		<Unit filename="Source/Drone.cpp" />
-		<Unit filename="Source/DroneInfo.cpp" />
-		<Unit filename="Source/Main.cpp" />
-		<Unit filename="Source/Vector3D.cpp" />
+		<Unit filename="src/CCode.h" />
+		<Unit filename="src/Coordinate3D.cpp" />
+		<Unit filename="src/Coordinate3D.h" />
+		<Unit filename="src/Demo.cpp" />
+		<Unit filename="src/Demo.h" />
+		<Unit filename="src/Drone.cpp" />
+		<Unit filename="src/Drone.h" />
+		<Unit filename="src/DroneInfo.cpp" />
+		<Unit filename="src/DroneInfo.h" />
+		<Unit filename="src/Main.cpp" />
+		<Unit filename="src/Test.cpp" />
+		<Unit filename="src/Vector3D.cpp" />
+		<Unit filename="src/Vector3D.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

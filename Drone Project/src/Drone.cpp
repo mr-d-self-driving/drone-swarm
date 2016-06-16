@@ -15,14 +15,12 @@
 #include <math.h>
 #include "DroneInfo.h"
 
-using std::string;
-
 //Parses the string contained in Net[] so the needed information can be extracted and used when needed.
-string ParseNet(string tempStringForParsing, int value_to_return)
+std::string ParseNet(std::string tempStringForParsing, int value_to_return)
 {
-    string delimiter = ":";
-    string token;
-    string id, x_coordinate, y_coordinate, z_coordinate, is_alive, battery_life;
+    std::string delimiter = ":";
+    std::string token;
+    std::string id, x_coordinate, y_coordinate, z_coordinate, is_alive, battery_life;
     size_t pos = 0;
     int counter = 0;
 
@@ -65,7 +63,7 @@ string ParseNet(string tempStringForParsing, int value_to_return)
 }
 
 //This just computes the distance of each drone from the target
-double ComputeDistances(string Net, Vector3D *target)
+double ComputeDistances(std::string Net, Vector3D *target)
 {
     Vector3D *coordinate = new Vector3D(strtod(ParseNet(Net,1).c_str(),NULL), strtod(ParseNet(Net,2).c_str(), NULL), strtod(ParseNet(Net,3).c_str(), NULL));
 
@@ -138,7 +136,7 @@ void Drone::CalculateNewWaypoint(DroneInfo *leadDrone)
 }
 
 //Starts calculating the positions of each drone and where they need to go in order to fly in a V formation
-void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDrone, double formationDistance, Vector3D *target, int num_drones)
+void MoveDronesVFormation(std::string Net[], Vector3D *formationVector, std::string leadDrone, double formationDistance, Vector3D *target, int num_drones)
 {
     /*
     int formationSpeed = 4;
@@ -362,12 +360,12 @@ void MoveDronesVFormation(string Net[], Vector3D *formationVector, string leadDr
     // sim only, so skipping.
     */
 }
-void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones)
+void avoidCollision(std::string Net[], std::vector<Vector3D> &changeVector, int num_drones)
 {
     int minCollisionDistance = 12;
 
     // creating a matrix of only living drones
-    vector<Vector3D> *livingDrones = new vector<Vector3D>(num_drones);
+    std::vector<Vector3D> *livingDrones = new std::vector<Vector3D>(num_drones);
     int counter = 0;
     int droneCounter = 0;   // counter for living drones.
     for(auto iter = livingDrones->begin(); iter != livingDrones->end(); iter++)
@@ -386,7 +384,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
     }
 
     // x is a copy matrix of livingDrones. Used to calculate the distance
-    vector<Vector3D> *x = new vector<Vector3D>((*livingDrones).size());
+    std::vector<Vector3D> *x = new std::vector<Vector3D>((*livingDrones).size());
     counter = 0;
     for(auto iter = x->begin(); iter != x->end(); iter++)
     {
@@ -401,7 +399,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
     int numDronesLiving = (*x).size();
 
     // distance vector with size m(m–1)/2
-    vector<double> *distance = new vector<double>(numDronesLiving*(numDronesLiving-1)/2);
+    std::vector<double> *distance = new std::vector<double>(numDronesLiving*(numDronesLiving-1)/2);
     // Distance in Euclidean 3 space
     counter = 0;
     for(auto iter = distance->begin(); iter != distance->end(); iter++)
@@ -448,7 +446,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
     }
 
 
-    vector<double> selectCollisions;
+    std::vector<double> selectCollisions;
 
     counter = 0;
     for(auto iter = distance->begin(); iter != distance->end(); iter++)
@@ -487,7 +485,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
         collisionDroneMatrix[i][1] = collisions[i][14];
     }
 
-    vector<Vector3D> *vbpt = new vector<Vector3D>(numDronesLiving);
+    std::vector<Vector3D> *vbpt = new std::vector<Vector3D>(numDronesLiving);
     counter = 0;
     for(auto iter = vbpt->begin(); iter != vbpt->end(); iter++)
     {
@@ -501,7 +499,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
         counter++;
     }
 
-    vector<double> magnitudeVbpt;
+    std::vector<double> magnitudeVbpt;
     for(auto iter = vbpt->begin(); iter != vbpt->end(); iter++)
     {
         double temp = (*vbpt)[counter].Magnitude();
@@ -510,7 +508,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
         counter++;
     }
 
-    vector<Vector3D> *uvbpt = new vector<Vector3D>(numDronesLiving);
+    std::vector<Vector3D> *uvbpt = new vector<Vector3D>(numDronesLiving);
     counter = 0;
     for(auto iter = uvbpt->begin(); iter != uvbpt->end(); iter++)
     {
@@ -523,7 +521,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
         counter++;
     }
 
-    vector<Vector3D> *chvt = new vector<Vector3D>(numDronesLiving);
+    std::vector<Vector3D> *chvt = new std::vector<Vector3D>(numDronesLiving);
     counter = 0;
     for(auto iter = chvt->begin(); iter != chvt->end(); chvt++)
     {
@@ -536,7 +534,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
         counter++;
     }
 
-    vector<Vector3D> *collisionAvoidVector = new vector<Vector3D>(numDronesLiving);
+    std::vector<Vector3D> *collisionAvoidVector = new std::vector<Vector3D>(numDronesLiving);
     counter = 0;
     for(auto iter = collisionAvoidVector->begin(); iter != collisionAvoidVector->end(); iter++)
     {
@@ -580,7 +578,7 @@ void avoidCollision(string Net[], vector<Vector3D> &changeVector, int num_drones
 //ZCoordinate=85.92
 //IsAlive = 1 - means drone is alive
 //BatteryLife = 75 or 75%
-void NetOut(string Net[], int State, Vector3D *target, int num_drones, int formationNumber)
+void NetOut(std::string Net[], int State, Vector3D *target, int num_drones, int formationNumber)
 {
     //Set initial variable to hold point to point distances
     double distances[num_drones]={0};
@@ -600,7 +598,7 @@ void NetOut(string Net[], int State, Vector3D *target, int num_drones, int forma
     }
 
     //Finds the lead drone based upon distance from target
-    string leadDrone = "-1";
+    std::string leadDrone = "-1";
     double leadDistance = minDist;
 
     for(int m = 0;m < num_drones + 1;m++)

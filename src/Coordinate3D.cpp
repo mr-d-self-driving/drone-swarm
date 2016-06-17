@@ -15,15 +15,7 @@ Coordinate3D::Coordinate3D(const Coordinate3D& copy) {
   z = copy.z;
 }
 
-double Coordinate3D::X() const { return x; }
-double Coordinate3D::Y() const { return y; }
-double Coordinate3D::Z() const { return z; }
-
-void Coordinate3D::setX(double input) { x = input; }
-void Coordinate3D::setY(double input) { y = input; }
-void Coordinate3D::setZ(double input) { z = input; }
-
-Vector3D* operator-(const Coordinate3D& lhs, const Coordinate3D& rhs) {
+Vector3D* Coordinate3D::operator-(const Coordinate3D& lhs, const Coordinate3D& rhs) {
   float x = lhs.X() - rhs.X();
   float y = lhs.Y() - rhs.Y();
   float z = lhs.Z() - rhs.Z();
@@ -32,7 +24,7 @@ Vector3D* operator-(const Coordinate3D& lhs, const Coordinate3D& rhs) {
 }
 
 // Too precise, need abs
-bool operator==(const Coordinate3D& lhs, const Coordinate3D& rhs) {
+bool Coordinate3D::operator==(const Coordinate3D& lhs, const Coordinate3D& rhs) {
   if (std::abs((lhs.X() - rhs.X()) < 1) && (std::abs(lhs.Y() - rhs.Y()) < 1) &&
       (std::abs(lhs.Z() - rhs.Z()) < 1))
     return true;
@@ -40,11 +32,11 @@ bool operator==(const Coordinate3D& lhs, const Coordinate3D& rhs) {
     return false;
 }
 
-bool operator!=(const Coordinate3D& lhs, const Coordinate3D& rhs) {
+bool Coordinate3D::operator!=(const Coordinate3D& lhs, const Coordinate3D& rhs) {
   return !(lhs == rhs);
 }
 
-Coordinate3D* operator+(Coordinate3D& lhs, const Vector3D& rhs) {
+Coordinate3D* Coordinate3D::operator+(Coordinate3D& lhs, const Vector3D& rhs) {
   lhs.setX(lhs.X() + rhs.X());
   lhs.setY(lhs.Y() + rhs.Y());
   lhs.setZ(lhs.Z() + rhs.Z());

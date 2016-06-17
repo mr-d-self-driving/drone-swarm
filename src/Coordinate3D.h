@@ -4,34 +4,26 @@
 #include "Vector3D.h"
 
 class Coordinate3D {
- private:
-  double x, y, z;
+  public:
+    Coordinate3D(); // Empty constructor
+    Coordinate3D(float xIn, float yIn, float zIn); // Intializing constructor
+    Coordinate3D(const Coordinate3D& copy); // Copy constructor
 
- public:
-  // Empty constructor
-  Coordinate3D();
-  // Intializing constructor
-  Coordinate3D(float xIn, float yIn, float zIn);
-  // Copy constructor
-  Coordinate3D(const Coordinate3D& copy);
+    Vector3D* operator-(const Coordinate3D& lhs, const Coordinate3D& rhs); // Returns a vector pointing towards the rhs coordinate
+    bool operator==(const Coordinate3D& lhs, const Coordinate3D& rhs);
+    bool operator!=(const Coordinate3D& lhs, const Coordinate3D& rhs);
+    Coordinate3D* operator+(Coordinate3D& lhs, const Vector3D& rhs);
 
-  // Private variable functions
-  double X() const;
-  double Y() const;
-  double Z() const;
+    inline void setX(double input) { x = input; }
+    inline void setY(double input) { y = input; }
+    inline void setZ(double input) { z = input; }
 
-  void setX(double input);
-  void setY(double input);
-  void setZ(double input);
+    inline double X() const { return x; } // does not change any member vars
+    inline double Y() const { return y; }
+    inline double Z() const { return z; }
+
+  private:
+    double x, y, z;
 };
-
-// Returns a vector pointing towards the rhs coordinate
-Vector3D* operator-(const Coordinate3D& lhs, const Coordinate3D& rhs);
-
-bool operator==(const Coordinate3D& lhs, const Coordinate3D& rhs);
-
-bool operator!=(const Coordinate3D& lhs, const Coordinate3D& rhs);
-
-Coordinate3D* operator+(Coordinate3D& lhs, const Vector3D& rhs);
 
 #endif // COORDINATE3D_H_

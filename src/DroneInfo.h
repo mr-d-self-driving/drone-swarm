@@ -5,36 +5,27 @@
 #include <string>
 
 class DroneInfo {
- private:
-  // Represents the drones location
-  Coordinate3D* location;
-  // Drones battery life remaining
-  double battery;
-
-  bool LeadDrone;
-
  public:
-  // ID number of the drone
-  int ID;
-
-  // Returns true if battery > 0, otherwise returns false
-  bool isAlive();
-
-  bool isLead();
-
   DroneInfo(std::string Net, bool lead);
+ ~DroneInfo();
 
-  ~DroneInfo();
-
-  Coordinate3D* GetLocation();
-
+  bool isAlive(); // Returns true if battery > 0, otherwise returns false
+  bool isLead();
   void SetLocation(float x, float y, float z);
-
-  double GetBattery();
-
-  void SetBattery(float batteryLevel);
-
   std::string ToString();
+
+  inline void SetLocation(float x, float y, float z)
+                            { location = new Coordinate3D(x, y, z); }
+  inline void SetBattery(float batteryLevel)
+                            { battery = batteryLevel; }
+  inline double GetBattery() { return battery; }
+  inline Coordinate3D* GetLocation() { return location; }
+
+ private:
+  Coordinate3D* location; // Represents the drones location
+  double battery; // Drones battery life remaining
+  bool LeadDrone;
+  int ID; // ID number of the drone
 };
 
 #endif

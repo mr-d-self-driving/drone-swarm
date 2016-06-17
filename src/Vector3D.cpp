@@ -30,7 +30,7 @@ double Vector3D::Magnitude() {
   return (std::sqrt((x * x) + (y * y) + (z * z)));
 }
 
-std::vector<Vector3D>* Repmat(Vector3D* vectorToRepeat, int timesToRepeat) {
+static std::vector<Vector3D>* Vector3D::Repmat(Vector3D* vectorToRepeat, int timesToRepeat) {
   std::vector<Vector3D>* result = new std::vector<Vector3D>(timesToRepeat);
 
   for (auto iter = result->begin(); iter != result->end(); iter++) {
@@ -81,19 +81,8 @@ Vector3D* Vector3D::RotateZ(double angle) {
   return result;
 }
 
-double Vector3D::X() const { return x; }
 
-double Vector3D::Y() const { return y; }
-
-double Vector3D::Z() const { return z; }
-
-void Vector3D::setX(double input) { x = input; }
-
-void Vector3D::setY(double input) { y = input; }
-
-void Vector3D::setZ(double input) { z = input; }
-
-Vector3D* Projection(Vector3D* of, Vector3D* onto) {
+static Vector3D* Vector3D::Projection(Vector3D* of, Vector3D* onto) {
   double aDotb = of->Dot(onto);
   double magASquared = std::pow(onto->Magnitude(), 2);
   double scalar = aDotb / magASquared;

@@ -4,47 +4,49 @@
 #include <iostream>
 #include "Coordinate3D.h"
 
-std::ofstream PositionFile, PositionFileTwo, RecPacketFile, SentPacketFile;
+static std::ofstream Demo::PositionFile;
 
 // WritePosition()
 void Demo::WritePosition(Coordinate3D *position) {
-  PositionFile << "Position: X: " << position->X() << "Y: " << position->Y()
+  position_file << "Position: X: " << position->X() << "Y: " << position->Y()
                << "Z: " << position->Z() << std::endl;
 }
 
 void Demo::WritePositionTwo(Coordinate3D *position) {
-  PositionFileTwo << "Position: X: " << position->X() << "Y: " << position->Y()
+  position_fileTwo << "Position: X: " << position->X() << "Y: " << position->Y()
                   << "Z: " << position->Z() << std::endl;
 }
 
 // WriteReceivedPacket()
 void Demo::WriteReceivedPacket(std::string packet) {
-  RecPacketFile << packet << std::endl;
+  rec_packet_file << packet << std::endl;
 }
 
 // WriteSentPacket()
 void Demo::WriteSentPacket(std::string packet) {
-  SentPacketFile << packet << std::endl;
+  sent_packet_file << packet << std::endl;
 }
 
 // Initialize()
 // This will create the 3 text files,
 void Demo::Initialize() {
-  PositionFile.open("Position.txt");
-  PositionFileTwo.open("Position2.txt");
-  RecPacketFile.open("PacketReceived.txt");
-  SentPacketFile.open("PacketSent.txt");
+  position_file.open("Position.txt");
+  position_file_two.open("Position2.txt");
+  rec_packet_file.open("PacketReceived.txt");
+  sent_packet_file.open("PacketSent.txt");
 
-  if (!(PositionFile.is_open() || RecPacketFile.is_open() ||
-        SentPacketFile.is_open()))
-    std::cout << "Error opening file" << std::endl;
+  if (!(position_file.is_open() || position_file_two.is_open() ||
+        rec_packet_file.is_open() || sent_packet_file.is_open())) {
+          std::cout << "Error opening file" << std::endl;
+        }
 }
 
 // Close files
 void Demo::CloseFiles() {
-  PositionFile.close();
-  RecPacketFile.close();
-  SentPacketFile.close();
+  position_file.close();
+  position_file_two.close();
+  rec_packet_file.close();
+  sent_packet_file.close();
 }
 
 void Demo::Move(Drone *drone, double speed) {

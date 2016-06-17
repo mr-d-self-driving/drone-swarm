@@ -1,25 +1,15 @@
+#include <unistd.h>
+#include <iostream>
 #include "Coordinate3D.h"
 #include "Vector3D.h"
-#include <iostream>
 #include "CCode.h"
 #include "DroneInfo.h"
 #include "Drone.h"
-#include <unistd.h>
-
-// Enable the demo code
-#define DEMO 1
-
-#ifdef DEMO
 #include "Demo.h"
-#endif  // DEMO
 
 int main() {
-#ifdef DEMO
-  std::cout << "Demo detected" << std::endl;
-
-  std::string SelfIP, PartnerIP;
-  SelfIP = "192.168.1.50";
-  PartnerIP = "192.168.1.150";
+  std::string SelfIP = "192.168.1.50";
+  std::string PartnerIP = "192.168.1.150";
 
   if (Init(SelfIP.c_str()) != 1)
     std::cout << "Socket initialization failed." << std::endl;

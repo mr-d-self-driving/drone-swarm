@@ -5,46 +5,31 @@
 #include <vector>
 
 class Vector3D {
- private:
-  double x, y, z;
-
  public:
-  // Constructor w/ initialization
-  Vector3D(double xIn, double yIn, double zIn);
-
-  // Empty constructor
-  Vector3D();
-
-  // Copy constructor
-  Vector3D(const Vector3D& copy);
+  Vector3D(); // Empty constructor
+  Vector3D(double xIn, double yIn, double zIn); // Constructor w/ initialization
+  Vector3D(const Vector3D& copy); // Copy constructor
 
   double Dot(Vector3D* rhs);
-
   double Magnitude();
-
-  double X() const;
-
-  double Y() const;
-
-  double Z() const;
-
-  void setX(double input);
-
-  void setY(double input);
-
-  void setZ(double input);
-
   Vector3D* UnitVector();
+  Vector3D* RotateZ(double angle);  // Rotate the vector in the z axis 'angle' degrees
 
-  Vector3D* operator/(double rhs);
-  // Rotate the vector in the z axis 'angle' degrees
-  Vector3D* RotateZ(double angle);
+  static Vector3D* Projection(Vector3D* of, Vector3D* onto);
+  static std::vector<Vector3D>* Repmat(Vector3D* vectorToRepeat, int timesToRepeat);
 
   Vector3D* operator*(double rhs);
+  Vector3D* operator/(double rhs);
+
+  inline void Vector3D::setX(double input) { x = input; }
+  inline void Vector3D::setY(double input) { y = input; }
+  inline void Vector3D::setZ(double input) { z = input; }
+  inline double Vector3D::X() const { return x; }
+  inline double Vector3D::Y() const { return y; }
+  inline double Vector3D::Z() const { return z; }
+
+ private:
+  double x, y, z;
 };
-
-std::vector<Vector3D>* Repmat(Vector3D* vectorToRepeat, int timesToRepeat);
-
-Vector3D* Projection(Vector3D* of, Vector3D* onto);
 
 #endif

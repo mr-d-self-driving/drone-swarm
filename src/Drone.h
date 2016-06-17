@@ -6,11 +6,11 @@
 
 class Drone {
  public:
+  Drone(Coordinate3D* target, DroneInfo* position);
   DroneInfo* info;
   Coordinate3D* waypoint;
   Coordinate3D* target;
   void CalculateNewWaypoint(DroneInfo* leadDrone);
-  Drone(Coordinate3D* target, DroneInfo* position);
 };
 
 #endif

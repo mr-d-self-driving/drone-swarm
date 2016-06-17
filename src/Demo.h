@@ -1,8 +1,8 @@
 #ifndef DEMO_H_
 #define DEMO_H_
 
-#include "Coordinate3D.h"
 #include <string>
+#include "Coordinate3D.h"
 #include "Drone.h"
 
 // Demo code for writing to & from files goes here
@@ -24,6 +24,8 @@ class Demo {
   static void CloseFiles();
 
   static void Move(Drone* drone, double speed);
+ private:
+  static std::ofstream position_file, position_file_two, rec_packet_file, sent_packet_file;
 };
 
 #endif

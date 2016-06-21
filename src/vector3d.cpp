@@ -1,6 +1,6 @@
 #include <cmath>
 #include <vector>
-#include "Vector3D.h"
+#include "vector3d.h"
 
 // Constructor w/ initialization
 Vector3D::Vector3D(double x, double y, double z) {
@@ -74,7 +74,7 @@ Vector3D Vector3D::Scale(double rhs) {
 }
 
 Vector3D operator-(const Vector3D& lhs, const Vector3D& rhs) {
-  return Vector3D(lhs.getX() - rhs.getX, lhs.getY() - rhs.getY(), lhs.getZ() - rhs.getZ());
+  return Vector3D(lhs.getX() - rhs.getX(), lhs.getY() - rhs.getY(), lhs.getZ() - rhs.getZ());
 }
 
 // Too precise, need abs
@@ -88,5 +88,5 @@ bool operator!=(const Vector3D& lhs, const Vector3D& rhs) {
 }
 
 Vector3D operator+(const Vector3D& lhs, const Vector3D& rhs) {
-  return Vector3D(lhs.getX() + rhs.getX, lhs.getX() + rhs.getY(), lhs.getZ() + rhs.getZ());
+  return Vector3D(lhs.getX() + rhs.getX(), lhs.getX() + rhs.getY(), lhs.getZ() + rhs.getZ());
 }

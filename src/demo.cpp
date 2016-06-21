@@ -3,6 +3,11 @@
 #include <fstream>
 #include "demo.h"
 
+std::ofstream Demo::position_file;
+std::ofstream Demo::position_file_two;
+std::ofstream Demo::rec_packet_file;
+std::ofstream Demo::sent_packet_file;
+
 // WritePosition()
 void Demo::WritePosition(std::ofstream *file, const Vector3D &position) {
   *file << "Position: X: " << position.getX() << "Y: " << position.getY()

@@ -3,7 +3,7 @@
 
 #include <string>
 #include "drone.h"
-#include "vector3D.h"
+#include "vector3d.h"
 
 // Demo code for writing to & from files goes here
 class Demo {

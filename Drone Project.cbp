@@ -30,19 +30,18 @@
 			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="src/CCode.h" />
-		<Unit filename="src/Coordinate3D.cpp" />
-		<Unit filename="src/Coordinate3D.h" />
-		<Unit filename="src/Demo.cpp" />
-		<Unit filename="src/Demo.h" />
-		<Unit filename="src/Drone.cpp" />
-		<Unit filename="src/Drone.h" />
-		<Unit filename="src/DroneInfo.cpp" />
-		<Unit filename="src/DroneInfo.h" />
-		<Unit filename="src/Main.cpp" />
-		<Unit filename="src/Test.cpp" />
-		<Unit filename="src/Vector3D.cpp" />
-		<Unit filename="src/Vector3D.h" />
+		<Unit filename="src/demo.cpp" />
+		<Unit filename="src/demo.h" />
+		<Unit filename="src/drone.cpp" />
+		<Unit filename="src/drone.h" />
+		<Unit filename="src/droneinfo.cpp" />
+		<Unit filename="src/droneinfo.h" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/socket.cpp" />
+		<Unit filename="src/socket.h" />
+		<Unit filename="src/test.cpp" />
+		<Unit filename="src/vector3d.cpp" />
+		<Unit filename="src/vector3d.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

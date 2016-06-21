@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <iostream>
-#include "Vector3D.h"
-#include "droneInfo.h"
+#include "vector3d.h"
+#include "droneinfo.h"
 #include "drone.h"
 #include "demo.h"
 #include "socket.h"

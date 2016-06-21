@@ -2,62 +2,46 @@
 #include <vector>
 #include "Vector3D.h"
 
-#define PI 3.14159265
-#define DegreeConversion (PI / 180)
-
 // Constructor w/ initialization
-Vector3D::Vector3D(double xIn, double yIn, double zIn) {
-  x = xIn;
-  y = yIn;
-  z = zIn;
+Vector3D::Vector3D(double x, double y, double z) {
+  this->x = x;
+  this->y = y;
+  this->z = z;
 }
 
-// Empty constructor
-Vector3D::Vector3D() { x = y = z = 0; }
 
 // Copy constructor
 Vector3D::Vector3D(const Vector3D& copy) {
-  x = copy.x;
-  y = copy.y;
-  z = copy.z;
+  this->x = copy.x;
+  this->y = copy.y;
+  this->z = copy.z;
 }
 
-double Vector3D::Dot(Vector3D* rhs) {
-  return ((x * rhs->x) + (y * rhs->y) + (z * rhs->z));
+double Vector3D::Dot(const Vector3D &rhs) const {
+  return ((x * rhs.x) + (y * rhs.y) + (z * rhs.z));
 }
 
-double Vector3D::Magnitude() {
+double Vector3D::Magnitude() const {
   return (std::sqrt((x * x) + (y * y) + (z * z)));
 }
 
-static std::vector<Vector3D>* Vector3D::Repmat(Vector3D* vectorToRepeat, int timesToRepeat) {
-  std::vector<Vector3D>* result = new std::vector<Vector3D>(timesToRepeat);
+std::vector<Vector3D> Vector3D::Repmat(Vector3D* vectorToRepeat, int timesToRepeat) {
+  std::vector<Vector3D> result(timesToRepeat);
 
-  for (auto iter = result->begin(); iter != result->end(); iter++) {
+  for (auto iter = result.begin(); iter != result.end(); iter++) {
     *iter = *vectorToRepeat;
   }
 
   return result;
 }
 
-// Divides each element of the vector by a scalar value
-Vector3D* Vector3D::operator/(double rhs) {
-  float newX = (x / rhs);
-  float newY = (y / rhs);
-  float newZ = (z / rhs);
-  Vector3D* result = new Vector3D(newX, newY, newZ);
-  return result;
-}
-
 // Returns a unit vector of the given vector
-Vector3D* Vector3D::UnitVector() {
-  Vector3D* result = new Vector3D(*(*this / this->Magnitude()));
-  return result;
+Vector3D Vector3D::UnitVector() {
+  return Vector3D((*this).Scale(1/this->Magnitude()));
 }
 
-Vector3D* Vector3D::RotateZ(double angle) {
-  Vector3D *rotationMatrixRowOne, *rotationMatrixRowTwo,
-      *rotationMatrixRowThree;
+Vector3D Vector3D::RotateZ(double angle) {
+  const double DegreeConversion = 3.14159265 / 180;
   // cos(theta), -sin(theta), 0
   // sin(theta), cos(theta), 0
   // 0, 0, 1
@@ -65,30 +49,44 @@ Vector3D* Vector3D::RotateZ(double angle) {
   x = std::cos(angle * DegreeConversion);
   y = -std::sin(angle * DegreeConversion);
   z = 0;
-  rotationMatrixRowOne = new Vector3D(x, y, z);
+  Vector3D rotationMatrixRowOne = Vector3D(x, y, z);
   x = std::sin(angle * DegreeConversion);
   y = std::cos(angle * DegreeConversion);
   z = 0;
-  rotationMatrixRowTwo = new Vector3D(x, y, z);
-  rotationMatrixRowThree = new Vector3D(0.0, 0.0, 1.0);
+  Vector3D rotationMatrixRowTwo = Vector3D(x, y, z);
+  Vector3D rotationMatrixRowThree = Vector3D(0.0, 0.0, 1.0);
 
-  x = rotationMatrixRowOne->Dot(this);  // dot of row one
-  y = rotationMatrixRowTwo->Dot(this);  // dot of row two
-  z = rotationMatrixRowThree->Dot(this);  // dot of row three
+  x = rotationMatrixRowOne.Dot(*this);  // dot of row one
+  y = rotationMatrixRowTwo.Dot(*this);  // dot of row two
+  z = rotationMatrixRowThree.Dot(*this);  // dot of row three
 
-  Vector3D* result = new Vector3D(x, y, z);
-
-  return result;
+  return Vector3D(x, y, z);
 }
 
 
-static Vector3D* Vector3D::Projection(Vector3D* of, Vector3D* onto) {
-  double aDotb = of->Dot(onto);
-  double magASquared = std::pow(onto->Magnitude(), 2);
-  double scalar = aDotb / magASquared;
-  return new Vector3D(onto->X() * scalar, onto->Y() * scalar, onto->Z());
+Vector3D Vector3D::Project(const Vector3D &onto) {
+  double scalar = this->Dot(onto) / std::pow(onto.Magnitude(), 2);
+  return Vector3D(onto.getX() * scalar, onto.getY() * scalar, onto.getZ() * scalar);
 }
 
-Vector3D* Vector3D::operator*(double rhs) {
-  return new Vector3D(this->X() * rhs, this->Y() * rhs, this->Z() * rhs);
+Vector3D Vector3D::Scale(double rhs) {
+  return Vector3D(getX() * rhs, getY() * rhs, getZ() * rhs);
+}
+
+Vector3D operator-(const Vector3D& lhs, const Vector3D& rhs) {
+  return Vector3D(lhs.getX() - rhs.getX, lhs.getY() - rhs.getY(), lhs.getZ() - rhs.getZ());
+}
+
+// Too precise, need abs
+bool operator==(const Vector3D& lhs, const Vector3D& rhs) {
+  return std::abs((lhs.getX() - rhs.getX()) < 1) && (std::abs(lhs.getY() - rhs.getY()) < 1) &&
+    (std::abs(lhs.getZ() - rhs.getZ()) < 1);
+}
+
+bool operator!=(const Vector3D& lhs, const Vector3D& rhs) {
+  return !(lhs == rhs);
+}
+
+Vector3D operator+(const Vector3D& lhs, const Vector3D& rhs) {
+  return Vector3D(lhs.getX() + rhs.getX, lhs.getX() + rhs.getY(), lhs.getZ() + rhs.getZ());
 }

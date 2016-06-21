@@ -1,30 +1,29 @@
 #ifndef DRONEINFO_H_
 #define DRONEINFO_H_
 
-#include "Coordinate3D.h"
 #include <string>
+#include "vector3d.h"
 
 class DroneInfo {
  public:
+  DroneInfo() {}
   DroneInfo(std::string Net, bool lead);
- ~DroneInfo();
 
-  bool isAlive(); // Returns true if battery > 0, otherwise returns false
-  bool isLead();
-  void SetLocation(float x, float y, float z);
-  std::string ToString();
+  inline bool isAlive() { return (battery > 0); } // Returns true if battery > 0, otherwise returns false
+  std::string toString();
 
-  inline void SetLocation(float x, float y, float z)
-                            { location = new Coordinate3D(x, y, z); }
-  inline void SetBattery(float batteryLevel)
+  inline void setLocation(const Vector3D &location) { this->location = location; }
+  inline void setLocation(float x, float y, float z) { location = Vector3D(x, y, z); }
+  inline void setBattery(float batteryLevel)
                             { battery = batteryLevel; }
-  inline double GetBattery() { return battery; }
-  inline Coordinate3D* GetLocation() { return location; }
+  inline double getBattery() const { return battery; }
+  inline Vector3D getLocation() const { return location; }
+  inline bool isLead() { return isLeadDrone; }
 
  private:
-  Coordinate3D* location; // Represents the drones location
+  Vector3D location; // Represents the drones location
   double battery; // Drones battery life remaining
-  bool LeadDrone;
+  bool isLeadDrone;
   int ID; // ID number of the drone
 };
 

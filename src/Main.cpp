@@ -1,65 +1,57 @@
 #include <unistd.h>
 #include <iostream>
-#include "Coordinate3D.h"
 #include "Vector3D.h"
-#include "CCode.h"
-#include "DroneInfo.h"
-#include "Drone.h"
-#include "Demo.h"
+#include "droneInfo.h"
+#include "drone.h"
+#include "demo.h"
+#include "socket.h"
 
 int main() {
   std::string SelfIP = "192.168.1.50";
   std::string PartnerIP = "192.168.1.150";
 
-  if (Init(SelfIP.c_str()) != 1)
+  //create the socket
+  if (Socket::Init(SelfIP.c_str()) != 0) {
     std::cout << "Socket initialization failed." << std::endl;
+  }
 
-  SetSendTo(PartnerIP.c_str());
+  //create the socket address
+  Socket::SetSockaddrIn(&Socket::remoteAddr, PartnerIP.c_str(), Socket::PORTNUM);
 
   // Creates the output files
   Demo::Initialize();
 
-  Coordinate3D *self, *target;
-  self = new Coordinate3D(50, 50, 100);
-  target = new Coordinate3D(100, 100, 100);
+  /* Temporary until MavLink can get the GPS coords*/
+  Vector3D self(50, 50, 100);
+  Vector3D target(100, 100, 100);
 
   // Network lead drone
-  DroneInfo *demoDroneInfo = new DroneInfo("1 50 50 100 100", true);
-  DroneInfo *leadDrone = demoDroneInfo;
+  DroneInfo demoDroneInfo("1 50 50 100 100", true);
+  DroneInfo leadDrone(demoDroneInfo);
 
-  /*
-  //Network not lead
-  DroneInfo *demoDroneInfo = new DroneInfo("1 40 40 100 100", false);
-  DroneInfo *leadDrone = new DroneInfo("1 50 50 100 100", true);
-  */
+  Drone demoDrone(target, demoDroneInfo);
+  demoDrone.CalculateWaypoint(leadDrone);
 
-  // DroneInfo *demoDroneInfoTwo = new DroneInfo("2 40 40 100 100", false);
-
-  Drone *demoDrone = new Drone(target, demoDroneInfo);
-  // Drone *demoDroneTwo = new Drone(target, demoDroneInfoTwo);
-  demoDrone->CalculateNewWaypoint(leadDrone);
-  // demoDroneTwo->CalculateNewWaypoint();
+  //test for 10 iterations
   for (int i = 0; i < 10; i++) {
-    // cout << "Iteration: " << i << endl;
-    Demo::Move(demoDrone, 5.0f);
-    demoDrone->CalculateNewWaypoint(leadDrone);
-    Demo::WriteSentPacket(demoDrone->info->ToString());
-    std::string messageOut = demoDrone->info->ToString();
-    // cout << "Message Out: " << messageOut << endl;
-    char packetOut[messageOut.size()];
-    strcpy(packetOut, messageOut.c_str());
-    SendMessage(packetOut);
-    // cout << "Message sent." << endl;
+    //update self data
+    demoDrone.Move(5.0f); //move the drone
+    demoDrone.CalculateWaypoint(leadDrone); //calculate the drone's next waypoint
+
+    // save and send current info
+    std::string info = demoDrone.getInfo().toString(); //string to write and send
+    Demo::WritePacket(&Demo::sent_packet_file, info); //write the drone's position to the file
+    Socket::SendMessage(info.c_str()); //send message to remotes
+
     sleep(0.2);
-    std::string message(RecieveMessage());
-    // cout << "Message recieved: " << message << endl;
-    Demo::WriteReceivedPacket(message);
-    if (!demoDroneInfo->isLead()) leadDrone = new DroneInfo(message, true);
-    Demo::WritePosition(demoDrone->info->GetLocation());
+
+    // receive info and write to file
+    std::string message = Socket::ReceiveMessage();
+    Demo::WritePacket(&Demo::rec_packet_file, message);
+
+    if (!demoDroneInfo.isLead()) { // if this drone is not the lead drone
+      leadDrone = DroneInfo(message, true); //set the lead drone to be the drone that send the message
+    }
   }
   return 0;
-#else   // DEMO
-  std::cout << "Not demo" << std::endl;
-  return 0;
-#endif  // DEMO
 }

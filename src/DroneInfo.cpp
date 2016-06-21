@@ -1,28 +1,23 @@
-#include "DroneInfo.h"
 #include <sstream>
 #include <string>
+#include "droneinfo.h"
+#include "vector3d.h"
 
-// ID:X:Y:Z:Battery
+// ID:getX:getY:getZ:Battery
 DroneInfo::DroneInfo(std::string Net, bool lead) {
   std::istringstream stream(Net);
   int id;
   double x, y, z, bat;
   stream >> id >> x >> y >> z >> bat;
   this->ID = id;
-  this->location = new Coordinate3D(x, y, z);
+  this->location = Vector3D(x, y, z);
   this->battery = bat;
-  this->LeadDrone = lead;
+  this->isLeadDrone = lead;
 }
 
-DroneInfo::~DroneInfo() { delete location; }
-
-bool DroneInfo::isAlive() { return (battery > 0); }
-
-bool DroneInfo::isLead() { return LeadDrone; }
-
-std::string DroneInfo::ToString() {
+std::string DroneInfo::toString() {
   std::ostringstream stream;
-  stream << ID << " " << location->X() << " " << location->Y() << " "
-         << location->Z() << " " << battery;
+  stream << ID << " " << location.getX() << " " << location.getY() << " "
+         << location.getZ() << " " << battery;
   return stream.str();
 }

@@ -1,30 +1,17 @@
 // Demo code for writing to & from files goes here
-#include "Demo.h"
-#include <fstream>
 #include <iostream>
-#include "Coordinate3D.h"
-
-static std::ofstream Demo::PositionFile;
+#include <fstream>
+#include "demo.h"
 
 // WritePosition()
-void Demo::WritePosition(Coordinate3D *position) {
-  position_file << "Position: X: " << position->X() << "Y: " << position->Y()
-               << "Z: " << position->Z() << std::endl;
-}
-
-void Demo::WritePositionTwo(Coordinate3D *position) {
-  position_fileTwo << "Position: X: " << position->X() << "Y: " << position->Y()
-                  << "Z: " << position->Z() << std::endl;
+void Demo::WritePosition(std::ofstream *file, const Vector3D &position) {
+  *file << "Position: X: " << position.getX() << "Y: " << position.getY()
+               << "Z: " << position.getZ() << std::endl;
 }
 
 // WriteReceivedPacket()
-void Demo::WriteReceivedPacket(std::string packet) {
-  rec_packet_file << packet << std::endl;
-}
-
-// WriteSentPacket()
-void Demo::WriteSentPacket(std::string packet) {
-  sent_packet_file << packet << std::endl;
+void Demo::WritePacket(std::ofstream *file, const std::string &packet) {
+  *file << packet << std::endl;
 }
 
 // Initialize()
@@ -47,14 +34,4 @@ void Demo::CloseFiles() {
   position_file_two.close();
   rec_packet_file.close();
   sent_packet_file.close();
-}
-
-void Demo::Move(Drone *drone, double speed) {
-  Coordinate3D *currentLocation = drone->info->GetLocation();
-  Vector3D *movementVector = *(drone->waypoint) - *currentLocation;
-  movementVector = movementVector->UnitVector();
-  movementVector = *(movementVector)*speed;
-  drone->info->SetLocation(currentLocation->X() + movementVector->X(),
-                           currentLocation->Y() + movementVector->Y(),
-                           currentLocation->Z() + movementVector->Z());
 }

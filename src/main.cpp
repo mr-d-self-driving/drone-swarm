@@ -8,7 +8,12 @@
 
 int main() {
   std::string SelfIP = "192.168.1.50";
+  std::cout << "Enter this IP: " << std::endl;
+  std::cin >> SelfIP;
+
   std::string PartnerIP = "192.168.1.150";
+  std::cout << "Enter the partner IP: " << std::endl;
+  std::cin >> PartnerIP;
 
   //create the socket
   if (Socket::Init(SelfIP.c_str()) != 0) {

@@ -3,12 +3,25 @@
 #include "vector3d.h"
 #include "droneinfo.h"
 #include "drone.h"
-#include "demo.h"
+#include "fileio.h"
 #include "socket.h"
 
 int main() {
+  std::string SelfIP;
+  std::vector<std::string> RemoteIPs (1);
+  FileIO::ReadIP(&SelfIP, &RemoteIPs);
+
+  /*
   std::string SelfIP = "192.168.1.50";
+  std::cout << "Enter this IP: " << std::endl;
+  std::cin >> SelfIP;
+
   std::string PartnerIP = "192.168.1.150";
+  std::cout << "Enter the partner IP: " << std::endl;
+  std::cin >> PartnerIP;
+  */
+  std::cout << "Self IP: " << SelfIP << std::endl
+            << "RemoteIP: " << RemoteIPs[1] << std::endl;
 
   //create the socket
   if (Socket::Init(SelfIP.c_str()) != 0) {
@@ -16,10 +29,10 @@ int main() {
   }
 
   //create the socket address
-  Socket::SetSockaddrIn(&Socket::remoteAddr, PartnerIP.c_str(), Socket::PORTNUM);
+  Socket::SetSockaddrIn(&Socket::remoteAddr, RemoteIPs[1].c_str(), Socket::PORTNUM);
 
   // Creates the output files
-  Demo::Initialize();
+  FileIO::Initialize();
 
   /* Temporary until MavLink can get the GPS coords*/
   Vector3D self(50, 50, 100);
@@ -33,21 +46,24 @@ int main() {
   demoDrone.CalculateWaypoint(leadDrone);
 
   //test for 10 iterations
-  for (int i = 0; i < 10; i++) {
+  while (true) {
     //update self data
     demoDrone.Move(5.0f); //move the drone
     demoDrone.CalculateWaypoint(leadDrone); //calculate the drone's next waypoint
 
     // save and send current info
     std::string info = demoDrone.getInfo().toString(); //string to write and send
-    Demo::WritePacket(&Demo::sent_packet_file, info); //write the drone's position to the file
+    std::cout << "Sent packet: " << info << std::endl;
+    FileIO::WritePacket(&FileIO::sent_packet_file, info); //write the drone's position to the file
     Socket::SendMessage(info.c_str()); //send message to remotes
 
-    sleep(0.2);
+    sleep(2);
 
     // receive info and write to file
-    std::string message = Socket::ReceiveMessage();
-    Demo::WritePacket(&Demo::rec_packet_file, message);
+    char *char_message = Socket::ReceiveMessage();
+    std::string message = char_message ? char_message : "";
+    std::cout << "Received packet: " << message << std::endl;
+    FileIO::WritePacket(&FileIO::rec_packet_file, message);
 
     if (!demoDroneInfo.isLead()) { // if this drone is not the lead drone
       leadDrone = DroneInfo(message, true); //set the lead drone to be the drone that send the message

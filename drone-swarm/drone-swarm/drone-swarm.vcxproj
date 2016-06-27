@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\demo.cpp" />
+    <ClCompile Include="..\..\src\fileio.cpp" />
     <ClCompile Include="..\..\src\drone.cpp" />
     <ClCompile Include="..\..\src\droneinfo.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
@@ -28,7 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\socket.cpp" />
-    <ClInclude Include="..\..\src\demo.h" />
+    <ClInclude Include="..\..\src\fileio.h" />
     <ClInclude Include="..\..\src\drone.h" />
     <ClInclude Include="..\..\src\droneinfo.h" />
     <ClInclude Include="..\..\src\socket.h" />

@@ -11,9 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\drone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -29,11 +26,11 @@
     <ClCompile Include="..\..\src\vector3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\fileio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\demo.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\drone.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -47,6 +44,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\fileio.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

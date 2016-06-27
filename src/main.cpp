@@ -19,6 +19,7 @@ int main() {
   std::string PartnerIP = "192.168.1.150";
   std::cout << "Enter the partner IP: " << std::endl;
   std::cin >> PartnerIP;
+<<<<<<< HEAD
   */
   std::cout << "Self IP: " << SelfIP << std::endl
             << "RemoteIP: " << RemoteIPs[1] << std::endl;

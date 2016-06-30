@@ -16,14 +16,15 @@ int NetworkTest() {
     return -1;
   }
 
-  if (Socket::SetSockaddrIn(&Socket::remoteAddr, remoteIP.c_str(), Socket::PORTNUM) < 1) {
+  if (Socket::SetSockaddrIn(&Socket::remoteAddr, remoteIP.c_str(),
+                            Socket::PORTNUM) < 1) {
     std::cout << "Set remote failed" << std::endl;
     return -1;
   }
 
   std::cout << "Init complete" << std::endl;
 
-  char *message;
+  char* message;
   bool exit = false;
   while (!exit) {
     std::cout << "Menu:" << std::endl

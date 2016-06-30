@@ -9,7 +9,6 @@ Vector3D::Vector3D(double x, double y, double z) {
   this->z = z;
 }
 
-
 // Copy constructor
 Vector3D::Vector3D(const Vector3D& copy) {
   this->x = copy.x;
@@ -17,7 +16,7 @@ Vector3D::Vector3D(const Vector3D& copy) {
   this->z = copy.z;
 }
 
-double Vector3D::Dot(const Vector3D &rhs) const {
+double Vector3D::Dot(const Vector3D& rhs) const {
   return ((x * rhs.x) + (y * rhs.y) + (z * rhs.z));
 }
 
@@ -25,7 +24,8 @@ double Vector3D::Magnitude() const {
   return (std::sqrt((x * x) + (y * y) + (z * z)));
 }
 
-std::vector<Vector3D> Vector3D::Repmat(Vector3D* vectorToRepeat, int timesToRepeat) {
+std::vector<Vector3D> Vector3D::Repmat(Vector3D* vectorToRepeat,
+                                       int timesToRepeat) {
   std::vector<Vector3D> result(timesToRepeat);
 
   for (auto iter = result.begin(); iter != result.end(); iter++) {
@@ -37,7 +37,7 @@ std::vector<Vector3D> Vector3D::Repmat(Vector3D* vectorToRepeat, int timesToRepe
 
 // Returns a unit vector of the given vector
 Vector3D Vector3D::UnitVector() {
-  return Vector3D((*this).Scale(1/this->Magnitude()));
+  return Vector3D((*this).Scale(1 / this->Magnitude()));
 }
 
 Vector3D Vector3D::RotateZ(double angle) {
@@ -56,17 +56,17 @@ Vector3D Vector3D::RotateZ(double angle) {
   Vector3D rotationMatrixRowTwo = Vector3D(x, y, z);
   Vector3D rotationMatrixRowThree = Vector3D(0.0, 0.0, 1.0);
 
-  x = rotationMatrixRowOne.Dot(*this);  // dot of row one
-  y = rotationMatrixRowTwo.Dot(*this);  // dot of row two
+  x = rotationMatrixRowOne.Dot(*this);    // dot of row one
+  y = rotationMatrixRowTwo.Dot(*this);    // dot of row two
   z = rotationMatrixRowThree.Dot(*this);  // dot of row three
 
   return Vector3D(x, y, z);
 }
 
-
-Vector3D Vector3D::Project(const Vector3D &onto) {
+Vector3D Vector3D::Project(const Vector3D& onto) {
   double scalar = this->Dot(onto) / std::pow(onto.Magnitude(), 2);
-  return Vector3D(onto.getX() * scalar, onto.getY() * scalar, onto.getZ() * scalar);
+  return Vector3D(onto.getX() * scalar, onto.getY() * scalar,
+                  onto.getZ() * scalar);
 }
 
 Vector3D Vector3D::Scale(double rhs) {
@@ -74,13 +74,15 @@ Vector3D Vector3D::Scale(double rhs) {
 }
 
 Vector3D operator-(const Vector3D& lhs, const Vector3D& rhs) {
-  return Vector3D(lhs.getX() - rhs.getX(), lhs.getY() - rhs.getY(), lhs.getZ() - rhs.getZ());
+  return Vector3D(lhs.getX() - rhs.getX(), lhs.getY() - rhs.getY(),
+                  lhs.getZ() - rhs.getZ());
 }
 
 // Too precise, need abs
 bool operator==(const Vector3D& lhs, const Vector3D& rhs) {
-  return std::abs((lhs.getX() - rhs.getX()) < 1) && (std::abs(lhs.getY() - rhs.getY()) < 1) &&
-    (std::abs(lhs.getZ() - rhs.getZ()) < 1);
+  return std::abs((lhs.getX() - rhs.getX()) < 1) &&
+         (std::abs(lhs.getY() - rhs.getY()) < 1) &&
+         (std::abs(lhs.getZ() - rhs.getZ()) < 1);
 }
 
 bool operator!=(const Vector3D& lhs, const Vector3D& rhs) {
@@ -88,5 +90,6 @@ bool operator!=(const Vector3D& lhs, const Vector3D& rhs) {
 }
 
 Vector3D operator+(const Vector3D& lhs, const Vector3D& rhs) {
-  return Vector3D(lhs.getX() + rhs.getX(), lhs.getX() + rhs.getY(), lhs.getZ() + rhs.getZ());
+  return Vector3D(lhs.getX() + rhs.getX(), lhs.getX() + rhs.getY(),
+                  lhs.getZ() + rhs.getZ());
 }

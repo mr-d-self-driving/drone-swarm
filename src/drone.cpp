@@ -16,19 +16,19 @@
 #include "vector3d.h"
 #include "droneinfo.h"
 
-Drone::Drone(const Vector3D &target, const DroneInfo &position) {
+Drone::Drone(const Vector3D& target, const DroneInfo& position) {
   this->target = target;
   this->info = position;
 }
 
 void Drone::Move(double speed) {
   Vector3D current_location = info.getLocation();
-  Vector3D movement_vector = (waypoint - current_location).UnitVector().Scale(speed);
+  Vector3D movement_vector =
+      (waypoint - current_location).UnitVector().Scale(speed);
   info.setLocation(current_location + movement_vector);
 }
 
-size_t split(const std::string &txt, std::vector<std::string>* strs)
-{
+size_t split(const std::string& txt, std::vector<std::string>* strs) {
   char delimiter = ':';
   size_t pos = txt.find(delimiter);
   size_t initialPos = 0;
@@ -43,7 +43,8 @@ size_t split(const std::string &txt, std::vector<std::string>* strs)
   }
 
   // Add the last one
-  strs->push_back(txt.substr(initialPos, std::min(pos, txt.size()) - initialPos + 1));
+  strs->push_back(
+      txt.substr(initialPos, std::min(pos, txt.size()) - initialPos + 1));
 
   return strs->size();
 }
@@ -58,15 +59,18 @@ std::string ParseNet(std::string input_str, int value_to_return) {
 
   // Searches the string and breaks it apart based on the ':' delimiter
   // Stores relevant information in appropriate variable
-  while ((pos = input_str.find(delimiter)) != std::string::npos) { //while there exists the delimiter in the string
-    token = input_str.substr(0, pos); //portion of the string before the delimiter
-    
+  while ((pos = input_str.find(delimiter)) !=
+         std::string::npos) {  // while there exists the delimiter in the string
+    token =
+        input_str.substr(0, pos);  // portion of the string before the delimiter
+
     /* ??? */
     if (value_to_return == counter) {
       return token;
     }
 
-    input_str.erase(0, pos + delimiter.length()); //erase the string up to the delimiter
+    input_str.erase(
+        0, pos + delimiter.length());  // erase the string up to the delimiter
     counter++;
   }
 
@@ -74,10 +78,12 @@ std::string ParseNet(std::string input_str, int value_to_return) {
 }
 
 // This just computes the distance of each drone from the target
-double Drone::ComputeDistanceToTarget(const std::string &Net, const Vector3D &target) {
-  //std::vector<std::string> str_coordinates;
-  //split(Net, &str_coordinates);
-  Vector3D coordinate(strtod(ParseNet(Net, 1).c_str(), NULL), //must convert to c_str for strtod
+double Drone::ComputeDistanceToTarget(const std::string& Net,
+                                      const Vector3D& target) {
+  // std::vector<std::string> str_coordinates;
+  // split(Net, &str_coordinates);
+  Vector3D coordinate(strtod(ParseNet(Net, 1).c_str(),
+                             NULL),  // must convert to c_str for strtod
                       strtod(ParseNet(Net, 2).c_str(), NULL),
                       strtod(ParseNet(Net, 3).c_str(), NULL));
 
@@ -88,45 +94,43 @@ double Drone::ComputeDistanceToTarget(const std::string &Net, const Vector3D &ta
 
 // Returns 1 if point is left of formation vector, -1 if to the right, and 0 if
 // aligned
-int Orientation(const Vector3D &target, const Vector3D &leadDrone,
-                const Vector3D &point) {
+int Orientation(const Vector3D& target, const Vector3D& leadDrone,
+                const Vector3D& point) {
   double result =
       ((target.getX() - leadDrone.getX()) * (point.getY() - leadDrone.getY())) -
       ((target.getY() - leadDrone.getY()) * (point.getX() - leadDrone.getX()));
   if (result == 0) {
     return 0;
-  }
-  else if (result > 0) {
+  } else if (result > 0) {
     return 1;
-  }
-  else {
+  } else {
     return -1;
   }
 }
 
-void Drone::CalculateWaypoint(const DroneInfo &leadDrone) {
+void Drone::CalculateWaypoint(const DroneInfo& leadDrone) {
   // if the drone is the leader, go straight for the target
-  if (info.isLead()) { 
+  if (info.isLead()) {
     this->waypoint = this->target;
     return;
   }
 
   // Formation vector is just a vector from the lead drone to the target.
   // It is the overall vector the drones follow.
-  Vector3D formationVector = this->target - leadDrone.getLocation(); 
+  Vector3D formationVector = this->target - leadDrone.getLocation();
 
   // calculate which side of the V this drone is on and will follow
   Vector3D VectorToUse;
-  if (Orientation(target, leadDrone.getLocation(), this->info.getLocation()) > 0) {
+  if (Orientation(target, leadDrone.getLocation(), this->info.getLocation()) >
+      0) {
     VectorToUse = formationVector.RotateZ((45 / 2) + 180).UnitVector();
-  }
-  else {
+  } else {
     VectorToUse = formationVector.RotateZ((-45 / 2) + 180).UnitVector();
   }
 
-  //the vector from this to the lead drone
+  // the vector from this to the lead drone
   Vector3D VectorToLead = leadDrone.getLocation() - (this->info.getLocation());
-  //project the vector the the lead dron
+  // project the vector the the lead dron
   Vector3D prjVecToLeadOnVForm = VectorToLead.Project(VectorToUse);
 
   this->waypoint = Vector3D(leadDrone.getLocation() - prjVecToLeadOnVForm);
@@ -162,8 +166,10 @@ strtod(ParseNet(leadDrone,3).c_str(),NULL));
   for(auto it = a->begin(); it != a->end();it++)
   {
       Vector3D *temp = new Vector3D(((*leadDroneCoords)[counter]).getX() -
-((*repmatFormationVector)[counter]).getX(), ((*leadDroneCoords)[counter]).getY() -
-((*repmatFormationVector)[counter]).getY(), ((*leadDroneCoords)[counter]).getZ() -
+((*repmatFormationVector)[counter]).getX(), ((*leadDroneCoords)[counter]).getY()
+-
+((*repmatFormationVector)[counter]).getY(), ((*leadDroneCoords)[counter]).getZ()
+-
 ((*repmatFormationVector)[counter]).getZ());
       (*a)[counter] = *temp;
       counter++;
@@ -175,7 +181,8 @@ strtod(ParseNet(leadDrone,3).c_str(),NULL));
   {
       sides[i] = ((*leadDroneCoords)[i].getX() - (*a)[i].getX()) *
 (strtod(ParseNet(Net[i], 2).c_str(), NULL) - (*a)[i].getY()) -
-((*leadDroneCoords)[i].getY() - (*a)[i].getY()) * (strtod(ParseNet(Net[i], 1).c_str(),
+((*leadDroneCoords)[i].getY() - (*a)[i].getY()) * (strtod(ParseNet(Net[i],
+1).c_str(),
 NULL) - (*a)[i].getX());
   }
 
@@ -302,7 +309,8 @@ projVectorToLeadDroneFV->end(); iter++)
 ((*droneVector)[counter]).getY() - (strtod(ParseNet(Net[counter],
 2).c_str(),NULL)),
                                     ((*leadDroneCoords)[counter]).getZ() -
-((*droneVector)[counter]).getZ() - (strtod(ParseNet(Net[counter], 3).c_str(),NULL))
+((*droneVector)[counter]).getZ() - (strtod(ParseNet(Net[counter],
+3).c_str(),NULL))
                                     );
       (*droneVector)[counter] = *temp;
       counter++;
@@ -405,7 +413,7 @@ the z axis.
   // sim only, so skipping.
   */
 //}
-//void avoidCollision(std::string Net[], std::vector<Vector3D> &changeVector,
+// void avoidCollision(std::string Net[], std::vector<Vector3D> &changeVector,
 //                    int num_drones) {
 //  int minCollisionDistance = 12;
 //
@@ -510,20 +518,26 @@ the z axis.
 //  counter = 0;
 //  for (auto iter = vbpt->begin(); iter != vbpt->end(); iter++) {
 //    Vector3D *temp = new Vector3D(
-//        strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])], 1).c_str(),
+//        strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])],
+//        1).c_str(),
 //               NULL) -
 //            strtod(
-//                ParseNet(Net[int(collisionDroneMatrix[counter][1])], 1).c_str(),
+//                ParseNet(Net[int(collisionDroneMatrix[counter][1])],
+//                1).c_str(),
 //                NULL),
-//        strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])], 2).c_str(),
+//        strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])],
+//        2).c_str(),
 //               NULL) -
 //            strtod(
-//                ParseNet(Net[int(collisionDroneMatrix[counter][1])], 2).c_str(),
+//                ParseNet(Net[int(collisionDroneMatrix[counter][1])],
+//                2).c_str(),
 //                NULL),
-//        strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])], 3).c_str(),
+//        strtod(ParseNet(Net[int(collisionDroneMatrix[counter][0])],
+//        3).c_str(),
 //               NULL) -
 //            strtod(
-//                ParseNet(Net[int(collisionDroneMatrix[counter][1])], 3).c_str(),
+//                ParseNet(Net[int(collisionDroneMatrix[counter][1])],
+//                3).c_str(),
 //                NULL));
 //    (*vbpt)[counter] = *temp;
 //
@@ -570,7 +584,8 @@ the z axis.
 //       iter != collisionAvoidVector->end(); iter++) {
 //    Vector3D *temp = new Vector3D(
 //        0, 0,
-//        0  //(*collisionAvoidVector)[int(collisionDroneMatrix[counter][0])].getX()
+//        0
+//        //(*collisionAvoidVector)[int(collisionDroneMatrix[counter][0])].getX()
 //           //+ (*chvt)[counter].getX()
 //        );
 //    (*collisionAvoidVector)[counter] = *temp;
@@ -622,7 +637,8 @@ the z axis.
 //// ZCoordinate=85.92
 //// IsAlive = 1 - means drone is alive
 //// BatteryLife = 75 or 75%
-//void NetOut(std::string Net[], int State, const Vector3D &target, int num_drones,
+// void NetOut(std::string Net[], int State, const Vector3D &target, int
+// num_drones,
 //            int formationNumber) {
 //  // Set initial variable to hold point to point distances
 //  double distances[num_drones] = {0};

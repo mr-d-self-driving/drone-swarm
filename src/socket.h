@@ -10,10 +10,11 @@ class Socket {
   static constexpr int PORTNUM = 1200;
   static constexpr int BUFFERSIZE = 2048;
 
-  static int SetSockaddrIn(struct sockaddr_in *addr, const char *ip, uint16_t port);
-  static int Init(const char *IPAddr);
-  static int SendMessage(const char *message);
-  static char *ReceiveMessage();
+  static int SetSockaddrIn(struct sockaddr_in* addr, const char* ip,
+                           uint16_t port);
+  static int Init(const char* IPAddr);
+  static int SendMessage(const char* message);
+  static char* ReceiveMessage();
 
   // IPv4 info struct, stores IP addresses
   // The info for this host, use for initialization
@@ -23,11 +24,11 @@ class Socket {
   // Might not be needed, only for testing completeness of data, we could make
   // sure sent messages are always constant lengths, pad with 0 if needed?
   static int bytesRecieved;
-  static int ourSocketDescriptor; // Descriptor for our socket
+  static int ourSocketDescriptor;  // Descriptor for our socket
 
   // messageBufferfer to store data, change from character to something else
   // later, message sent is a void *
   static char messageBuffer[BUFFERSIZE];
 };
 
-#endif // SOCKET_H_
+#endif  // SOCKET_H_

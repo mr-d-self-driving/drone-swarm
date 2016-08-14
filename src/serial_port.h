@@ -86,7 +86,7 @@ class Serial_Port {
 
   int status;
 
-  //get a message and save it to message
+  // get a message and save it to message
   int read_message(mavlink_message_t &message);
   int write_message(const mavlink_message_t &message);
 

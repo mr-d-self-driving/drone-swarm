@@ -40,7 +40,7 @@
 #include <signal.h>
 #include <time.h>
 #include <sys/time.h>
-#include <common/mavlink.h> 
+#include <common/mavlink.h>
 #include "serial_port.h"
 
 /**

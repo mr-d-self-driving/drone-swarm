@@ -7,20 +7,16 @@
 #include "socket.h"
 
 int main() {
+  if (!FileIO::exists("ip.txt")) {
+    FileIO::create_file("ip.txt");
+    std::cout << "Created ip.txt\nEdit it with first line this ip, other lines other ips." << std::endl;
+    return 1;
+  }
+
   std::string SelfIP;
   std::vector<std::string> RemoteIPs(1);
   FileIO::ReadIP(&SelfIP, &RemoteIPs);
 
-  /*
-  std::string SelfIP = "192.168.1.50";
-  std::cout << "Enter this IP: " << std::endl;
-  std::cin >> SelfIP;
-
-  std::string PartnerIP = "192.168.1.150";
-  std::cout << "Enter the partner IP: " << std::endl;
-  std::cin >> PartnerIP;
-<<<<<<< HEAD
-  */
   std::cout << "Self IP: " << SelfIP << std::endl
             << "RemoteIP: " << RemoteIPs[1] << std::endl;
 
@@ -31,7 +27,7 @@ int main() {
 
   // create the socket address
   Socket::SetSockaddrIn(&Socket::remoteAddr, RemoteIPs[1].c_str(),
-                        Socket::PORTNUM);
+    Socket::PORTNUM);
 
   // Creates the output files
   FileIO::Initialize();
@@ -55,8 +51,7 @@ int main() {
         leadDrone);  // calculate the drone's next waypoint
 
     // save and send current info
-    std::string info =
-        demoDrone.getInfo().toString();  // string to write and send
+    std::string info = demoDrone.getInfo().toString();
     std::cout << "Sent packet: " << info << std::endl;
     FileIO::WritePacket(&FileIO::sent_packet_file,
                         info);  // write the drone's position to the file
@@ -71,9 +66,7 @@ int main() {
     FileIO::WritePacket(&FileIO::rec_packet_file, message);
 
     if (!demoDroneInfo.isLead()) {  // if this drone is not the lead drone
-      leadDrone = DroneInfo(
-          message,
-          true);  // set the lead drone to be the drone that send the message
+      leadDrone = DroneInfo(message, true);  // the lead drone sends the message
     }
   }
   return 0;

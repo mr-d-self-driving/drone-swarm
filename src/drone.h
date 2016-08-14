@@ -10,8 +10,17 @@ class Drone {
 
   void CalculateWaypoint(const DroneInfo& leadDrone);
   void Move(double speed);
-  double ComputeDistanceToTarget(const std::string& Net,
-                                 const Vector3D& target);
+  static double ComputeDistanceToTarget(const std::string& Net,
+                                        const Vector3D& target);
+
+  static void MoveDronesVFormation(
+      std::string Net[], const Vector3D& formationVector, std::string leadDrone,
+      double formationDistance, const Vector3D& target, const int num_drones);
+  static void AvoidCollision(std::string Net[],
+                             const std::vector<Vector3D>& changeVector,
+                             const int num_drones);
+  static void NetOut(std::string Net[], int State, const Vector3D& target,
+                     int num_drones, int formationNumber);
 
   Vector3D getWaypoint() { return waypoint; }
   Vector3D getTarget() { return target; }

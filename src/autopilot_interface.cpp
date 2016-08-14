@@ -52,7 +52,7 @@
 // ------------------------------------------------------------------------------
 
 #include "autopilot_interface.h"
-#include "serial_port.h" 
+#include "serial_port.h"
 
 // ----------------------------------------------------------------------------------
 //   Time
@@ -244,7 +244,8 @@ void Autopilot_Interface::read_messages() {
           current_messages.time_stamps.sys_status = get_time_usec();
           this_timestamps.sys_status = current_messages.time_stamps.sys_status;
 
-          printf("Battery life remaining: %i\n", current_messages.sys_status.battery_remaining);
+          printf("Battery life remaining: %i\n",
+                 current_messages.sys_status.battery_remaining);
           break;
         }
 
@@ -257,7 +258,8 @@ void Autopilot_Interface::read_messages() {
           this_timestamps.battery_status =
               current_messages.time_stamps.battery_status;
 
-          printf("Battery life remaining: %i\n", current_messages.battery_status.battery_remaining);
+          printf("Battery life remaining: %i\n",
+                 current_messages.battery_status.battery_remaining);
           break;
         }
 
@@ -275,7 +277,10 @@ void Autopilot_Interface::read_messages() {
           printf("MAVLINK_MSG_ID_LOCAL_POSITION_NED\n");
           mavlink_msg_local_position_ned_decode(
               &message, &(current_messages.local_position_ned));
-          printf("    pos  (GPS):  %f %f %f (m)\n", current_messages.local_position_ned.x, current_messages.local_position_ned.y, current_messages.local_position_ned.z);
+          printf("    pos  (GPS):  %f %f %f (m)\n",
+                 current_messages.local_position_ned.x,
+                 current_messages.local_position_ned.y,
+                 current_messages.local_position_ned.z);
           current_messages.time_stamps.local_position_ned = get_time_usec();
           this_timestamps.local_position_ned =
               current_messages.time_stamps.local_position_ned;
@@ -290,9 +295,11 @@ void Autopilot_Interface::read_messages() {
           this_timestamps.global_position_int =
               current_messages.time_stamps.global_position_int;
 
-          mavlink_global_position_int_t gpos = current_messages.global_position_int;
-          printf("    pos  (GPS):  %f %f %f (m)\n", gpos.lat, gpos.lon, gpos.alt);
-          
+          mavlink_global_position_int_t gpos =
+              current_messages.global_position_int;
+          printf("    pos  (GPS):  %f %f %f (m)\n", gpos.lat, gpos.lon,
+                 gpos.alt);
+
           break;
         }
 
@@ -326,13 +333,14 @@ void Autopilot_Interface::read_messages() {
           this_timestamps.highres_imu =
               current_messages.time_stamps.highres_imu;
 
-          mavlink_highres_imu_t imu = current_messages.highres_imu; 
+          mavlink_highres_imu_t imu = current_messages.highres_imu;
           printf("    ap time:     %llu \n", imu.time_usec);
           printf("    acc  (NED):  % f % f % f (m/s^2)\n", imu.xacc, imu.yacc,
                  imu.zacc);
           printf("    gyro (NED):  % f % f % f (rad/s)\n", imu.xgyro, imu.ygyro,
                  imu.zgyro);
-          printf("    mag  (NED):  % f % f % f (Ga)\n", imu.xmag, imu.ymag, imu.zmag);
+          printf("    mag  (NED):  % f % f % f (Ga)\n", imu.xmag, imu.ymag,
+                 imu.zmag);
           printf("    baro:        %f (mBar) \n", imu.abs_pressure);
           printf("    altitude:    %f (m) \n", imu.pressure_alt);
           printf("    temperature: %f C \n", imu.temperature);
@@ -345,13 +353,14 @@ void Autopilot_Interface::read_messages() {
           current_messages.time_stamps.attitude = get_time_usec();
           this_timestamps.attitude = current_messages.time_stamps.attitude;
 
-          mavlink_attitude_t att = current_messages.attitude; 
-          printf("###   roll: %f  pitch: %f  yaw: %f\n", att.roll, att.pitch, att.yaw);
+          mavlink_attitude_t att = current_messages.attitude;
+          printf("###   roll: %f  pitch: %f  yaw: %f\n", att.roll, att.pitch,
+                 att.yaw);
           break;
         }
 
         default: {
-          //printf("Warning, did not handle message id %i\n",message.msgid);
+          // printf("Warning, did not handle message id %i\n",message.msgid);
           break;
         }
 
@@ -434,7 +443,7 @@ void Autopilot_Interface::write_setpoint() {
     fprintf(stderr, "WARNING: could not send POSITION_TARGET_LOCAL_NED \n");
   //	else
   //		printf("%lu POSITION_TARGET  = [ %f , %f , %f ] \n",
-  //write_count,
+  // write_count,
   // position_target.x, position_target.y, position_target.z);
 
   return;

@@ -37,83 +37,35 @@
 #include "mavlink_control.h"
 
 int top(int argc, char **argv) {
-// Default input arguments
-#ifdef __APPLE__
-  char *uart_name = (char *)"/dev/tty.usbmodem1";
-#else
-  char *uart_name = (char *)"/dev/ttyAMA0";
-#endif
+  // parse command line
+  char *uart_name = (char *)"/dev/ttyS0";
   int baudrate = 57600;
   bool debug = false;
-
-  // do the parse, will throw an int if it fails
   parse_commandline(argc, argv, &uart_name, &baudrate, &debug);
 
-  // --------------------------------------------------------------------------
-  //   PORT and THREAD STARTUP
-  // --------------------------------------------------------------------------
-
-  /*
-   * Instantiate a serial port object
-   *
-   * This object handles the opening and closing of the offboard computer's
-   * serial port over which it will communicate to an autopilot.  It has
-   * methods to read and write a mavlink_message_t object.  To help with read
-   * and write in the context of pthreading, it gaurds port operations with a
-   * pthread mutex lock.
-   *
-   */
+  // vars
   Serial_Port serial_port(uart_name, baudrate, debug);
-
-  /*
-   * Instantiate an autopilot interface object
-   *
-   * This starts two threads for read and write over MAVlink. The read thread
-   * listens for any MAVlink message and pushes it to the current_messages
-   * attribute.  The write thread at the moment only streams a position target
-   * in the local NED frame (mavlink_set_position_target_local_ned_t), which
-   * is changed by using the method update_setpoint().  Sending these messages
-   * are only half the requirement to get response from the autopilot, a signal
-   * to enter "offboard_control" mode is sent by using the
-   * enable_offboard_control()
-   * method.  Signal the exit of this mode with disable_offboard_control(). It's
-   * important that one way or another this program signals offboard mode exit,
-   * otherwise the vehicle will go into failsafe.
-   *
-   */
   Autopilot_Interface autopilot_interface(&serial_port);
 
-  /*
-   * Setup interrupt signal handler
-   *
-   * Responds to early exits signaled with Ctrl-C.  The handler will command
-   * to exit offboard mode if required, and close threads and the port.
-   * The handler in this example needs references to the above objects.
-   *
-   */
-  serial_port_quit = &serial_port;
-  autopilot_interface_quit = &autopilot_interface;
-  signal(SIGINT, quit_handler);
+  // quit signals
+  serial_port_quit = &serial_port;  // global var used in quit_handler
+  autopilot_interface_quit = &autopilot_interface;  // ^^
+  signal(SIGINT,
+         quit_handler);  // used to end program safely when C-c is pressed
 
-  // Start the port and autopilot_interface
-  // This is where the port is opened, and read and write threads are started.
-
+  // start up
   serial_port.start();
   autopilot_interface.start();
 
-  // Now we can implement the algorithm we want on top of the autopilot interface
+  // actual work
   commands(autopilot_interface);
 
-  // Now that we are done we can stop the threads and close the port
+  // stop
   autopilot_interface.stop();
   serial_port.stop();
 
   return 0;
 }
-
-// ------------------------------------------------------------------------------
-//   COMMANDS
-// ------------------------------------------------------------------------------
 
 void commands(Autopilot_Interface &api) {
   // --------------------------------------------------------------------------
@@ -158,8 +110,10 @@ void commands(Autopilot_Interface &api) {
 
   // Wait for 8 seconds, check position
   for (int i = 0; i < 8; i++) {
-    // mavlink_local_position_ned_t pos = api.current_messages.local_position_ned;
-    // printf("%i CURRENT POSITION XYZ = [ % .4f , % .4f , % .4f ] \n", i, pos.x,
+    // mavlink_local_position_ned_t pos =
+    // api.current_messages.local_position_ned;
+    // printf("%i CURRENT POSITION XYZ = [ % .4f , % .4f , % .4f ] \n", i,
+    // pos.x,
     //        pos.y, pos.z);
     sleep(10);
   }
@@ -211,11 +165,8 @@ void commands(Autopilot_Interface &api) {
   return;
 }
 
-// ------------------------------------------------------------------------------
-//   Parse Command Line
-// ------------------------------------------------------------------------------
-// throws EXIT_FAILURE if could not open the port
-void parse_commandline(int argc, char **argv, char **uart_name, int *baudrate, bool *debug) {
+void parse_commandline(int argc, char **argv, char **uart_name, int *baudrate,
+                       bool *debug) {
   // string for command line usage
   const char *commandline_usage =
       "usage: mavlink_control [-d <devicename>] [-b <baudrate>] [-t <debug>]";
@@ -251,8 +202,8 @@ void parse_commandline(int argc, char **argv, char **uart_name, int *baudrate, b
       }
     }
 
-    //debugging
-    if (strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--debug") ==0) {
+    // debugging
+    if (strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--debug") == 0) {
       *debug = true;
     }
   }
@@ -283,17 +234,4 @@ void quit_handler(int sig) {
 
   // end program here
   exit(0);
-}
-
-int main_n(int argc, char **argv) {
-  // This program uses throw, wrap one big try/catch here
-  try {
-    int result = top(argc, argv);
-    return result;
-  }
-
-  catch (int error) {
-    fprintf(stderr, "mavlink_control threw exception %i \n", error);
-    return error;
-  }
 }

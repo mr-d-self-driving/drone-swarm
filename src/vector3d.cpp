@@ -24,41 +24,28 @@ double Vector3D::Magnitude() const {
   return (std::sqrt((x * x) + (y * y) + (z * z)));
 }
 
-std::vector<Vector3D> Vector3D::Repmat(Vector3D* vectorToRepeat,
+std::vector<Vector3D> Vector3D::Repmat(const Vector3D& vectorToRepeat,
                                        int timesToRepeat) {
   std::vector<Vector3D> result(timesToRepeat);
-
-  for (auto iter = result.begin(); iter != result.end(); iter++) {
-    *iter = *vectorToRepeat;
+  for (auto& vector : result) {
+    vector = vectorToRepeat;
   }
-
   return result;
 }
 
 // Returns a unit vector of the given vector
-Vector3D Vector3D::UnitVector() {
+Vector3D Vector3D::UnitVector() const {
   return Vector3D((*this).Scale(1 / this->Magnitude()));
 }
 
-Vector3D Vector3D::RotateZ(double angle) {
-  const double DegreeConversion = 3.14159265 / 180;
-  // cos(theta), -sin(theta), 0
-  // sin(theta), cos(theta), 0
-  // 0, 0, 1
-  float x, y, z;
-  x = std::cos(angle * DegreeConversion);
-  y = -std::sin(angle * DegreeConversion);
-  z = 0;
-  Vector3D rotationMatrixRowOne = Vector3D(x, y, z);
-  x = std::sin(angle * DegreeConversion);
-  y = std::cos(angle * DegreeConversion);
-  z = 0;
-  Vector3D rotationMatrixRowTwo = Vector3D(x, y, z);
-  Vector3D rotationMatrixRowThree = Vector3D(0.0, 0.0, 1.0);
+Vector3D Vector3D::RotateZ(double degrees) const {
+  double rad = degrees * 3.14159265 / 180;
 
-  x = rotationMatrixRowOne.Dot(*this);    // dot of row one
-  y = rotationMatrixRowTwo.Dot(*this);    // dot of row two
-  z = rotationMatrixRowThree.Dot(*this);  // dot of row three
+  double x =
+      Vector3D(std::cos(rad), -std::sin(rad), 0).Dot(*this);  // dot of row one
+  double y =
+      Vector3D(std::sin(rad), std::cos(rad), 0).Dot(*this);  // dot of row two
+  double z = Vector3D(0.0, 0.0, 1.0).Dot(*this);             // dot of row three
 
   return Vector3D(x, y, z);
 }
@@ -69,7 +56,7 @@ Vector3D Vector3D::Project(const Vector3D& onto) {
                   onto.getZ() * scalar);
 }
 
-Vector3D Vector3D::Scale(double rhs) {
+Vector3D Vector3D::Scale(double rhs) const {
   return Vector3D(getX() * rhs, getY() * rhs, getZ() * rhs);
 }
 
@@ -93,3 +80,29 @@ Vector3D operator+(const Vector3D& lhs, const Vector3D& rhs) {
   return Vector3D(lhs.getX() + rhs.getX(), lhs.getX() + rhs.getY(),
                   lhs.getZ() + rhs.getZ());
 }
+
+Vector3D operator*(const Vector3D& lhs, double rhs) {
+  return Vector3D(lhs.getX() * rhs, lhs.getY() * rhs, lhs.getZ() * rhs);
+}
+
+Vector3D operator/(const Vector3D& lhs, double rhs) {
+  return Vector3D(lhs.getX() / rhs, lhs.getY() / rhs, lhs.getZ() / rhs);
+}
+
+Vector3D& Vector3D::operator+=(const Vector3D& rhs) {
+  *this = *this + rhs;
+  return *this;
+}
+
+Vector3D& Vector3D::operator-=(const Vector3D& rhs) {
+  *this = *this - rhs;
+  return *this;
+}
+
+// Vector3D operator+=(const Vector3D &lhs, const Vector3D &rhs) {
+//   return lhs + rhs;
+// }
+
+// Vector3D operator+=(const Vector3D &lhs, const Vector3D &rhs) {
+//   return lhs + rhs;
+// }

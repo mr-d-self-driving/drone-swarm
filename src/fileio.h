@@ -12,12 +12,15 @@ class FileIO {
   static void WritePosition(std::ofstream *file, const Vector3D &position);
   static void WritePacket(std::ofstream *file, const std::string &packet);
 
-  static void Initialize(); // This will create the 3 text files,
-  static void CloseFiles(); // Close the files
+  static void Initialize();  // This will create the 3 text files,
+  static void CloseFiles();  // Close the files
 
- //private:
+  // http://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
+  static bool exists(const std::string &name);
+  static void create_file(const std::string &name);
+
+  // private:
   static std::ofstream position_file;
-  static std::ofstream position_file_two;
   static std::ofstream rec_packet_file;
   static std::ofstream sent_packet_file;
 };
